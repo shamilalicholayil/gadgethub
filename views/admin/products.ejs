@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <%- include("../partials/adminSidebar") %>
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex justify-content-between align-items-center p-4">
+                <h4 class="text-info fw-bold">Products</h4>
+                <div class="d-flex justify-content-center gap-2">
+                    <input type="text" 
+                    id="searchInput"
+                    placeholder="Search Name" 
+                    class="form-control custom-input border-secondary w-50">
+                    <button class="btn btn-info"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">+ Add Product</button>
+                </div>
+            </div>
+            <div class="container">
+                <table class="table table-responsive align-middle table-transparant table-hover">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <% if(products.length === 0) { %>
+                            <tr>
+                                <td colspan="8" class="text-center py-3">No products found.</td>
+                            </tr>
+                        <% } else { %>
+                            <% products.forEach(product => { %>
+                                <tr>
+                                    <td>
+                                        <img src="/uploads/<%= product.images[0] %>"
+                                            width="55" height="55"
+                                            style="object-fit:cover;border-radius:10px">
+                                    </td>
+                                    <td><%= product.name %></td>
+                                    <td><%= product.brand ? product.brand.name : "N/A" %></td>
+                                    <td><%= product.category ? product.category.name : "N/A" %></td>
+                                    <td>₹<%= product.price %></td>
+                                    <td><%= product.stock %></td>
+                                    <td>
+                                        <% if(product.isActive) { %>
+                                            <span class="badge bg-success">Active</span>
+                                        <% } else { %>
+                                            <span class="badge bg-secondary">Disabled</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info editBtn"
+                                                data-id="<%= product._id %>"
+                                                data-name="<%= product.name %>"
+                                                data-description="<%= product.description %>"
+                                                data-price="<%= product.price %>"
+                                                data-stock="<%= product.stock %>"
+                                                data-brand="<%= product.brand ? product.brand._id : '' %>"
+                                                data-category="<%= product.category ? product.category._id : '' %>"
+                                                data-images='<%= JSON.stringify(product.images) %>'>
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger deleteBtn"
+                                                data-id="<%= product._id %>"
+                                                data-active="<%= product.isActive %>">
+                                            <i class="fa fa-power-off"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center mt-3" id="paginationContainer"></ul>
+
+        <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                        data-bs-dismiss="toast">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-modal text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-info fw-bold">
+                        <i class="fa fa-box me-2"></i>Add Product</h5>
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-secondary mb-3">Basic Info</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" id="productName"
+                            class="form-control custom-input"
+                            placeholder="Product Name">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" id="productDesc"
+                            class="form-control custom-input"
+                            placeholder="Short Description">
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Pricing & Stock</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="number" id="productPrice"
+                            class="form-control custom-input"
+                            placeholder="Price (₹)">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" id="productStock"
+                            class="form-control custom-input"
+                            placeholder="Stock Quantity">
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Classification</h6>    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <select id="productBrand"
+                            class="form-select custom-input">
+                            <option value="">Select Brand</option>
+                            <% brands.forEach(brand => { %>
+                                <option value="<%= brand._id %>"><%= brand.name %></option>
+                            <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <select id="productCategory"
+                            class="form-select custom-input">
+                            <option value="">Select Category</option>
+                            <% categories.forEach(category => { %>
+                                <option value="<%= category._id %>"><%= category.name %></option>
+                            <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Product Images</h6>
+                    <input type="file" id="addImage_0" name="image_0">
+                    <input type="file" id="addImage_1" name="image_1">
+                    <input type="file" id="addImage_2" name="image_2">
+                    <input type="file" id="addImage_3" name="image_3">
+                    <input type="file" id="addImage_4" name="image_4">
+                    <div id="productImagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    <p id="productError" class="text-danger mt-2 d-none"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info"
+                            id="saveProductBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-modal text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-info fw-bold">
+                        <i class="fa fa-box me-2"></i>Edit Product
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-secondary mb-3">Basic Info</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" id="editProductName"
+                                    class="form-control custom-input"
+                                    value="">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" id="editProductDesc"
+                                    class="form-control custom-input"
+                                    value="">
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Pricing & Stock</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="number" id="editProductPrice"
+                                    class="form-control custom-input"
+                                    value="">
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="number" id="editProductStock"
+                                    class="form-control custom-input"
+                                    value="">
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Classification</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <select id="editProductBrand"
+                                    class="form-select custom-input">
+                                <option value="">Select Brand</option>
+                                <% brands.forEach(brand => { %>
+                                    <option value="<%= brand._id %>"><%= brand.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <select id="editProductCategory"
+                                    class="form-select custom-input">
+                                <option value="">Select Category</option>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                <% }) %>    
+                            </select>
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Product Offer</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="editHasOffer">
+                                <label class="form-check-label text-secondary">Enable Offer</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="number" id="editOfferPercent"
+                                    class="form-control custom-input"
+                                    placeholder="Offer % (e.g. 20)">
+                        </div>
+                    </div>
+                    <h6 class="text-secondary mt-4 mb-3">Product Images</h6>
+                    <input type="file" id="editImage_0" name="image_0" class="d-none">
+                    <input type="file" id="editImage_1" name="image_1" class="d-none">
+                    <input type="file" id="editImage_2" name="image_2" class="d-none">
+                    <input type="file" id="editImage_3" name="image_3" class="d-none">
+                    <input type="file" id="editImage_4" name="image_4" class="d-none">
+                    <div id="editProductImagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    <p id="editProductError" class="text-danger mt-2 d-none"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info"
+                            id="saveEditProductBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/product.js"></script>
+</body>
+</html>

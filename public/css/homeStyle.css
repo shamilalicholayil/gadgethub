@@ -1,0 +1,110 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: #fff;
+}
+
+.hero-section {
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #0b1a3a, #050b1f);
+  padding: 60px 0;
+}
+
+/* Tilt effect without extra box */
+.hero-img {
+  transform: rotate(-10deg);
+  max-width: 90%;
+}
+
+/* Responsive tweaks */
+@media (max-width: 992px) {
+  .hero-img {
+    transform: rotate(0deg);
+    margin-top: 20px;
+  }
+}
+
+
+ 
+.cat-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(57,180,255,0.08);
+  border-radius: 14px;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.cat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(57,180,255,0.35);
+  box-shadow: 0 12px 36px rgba(0,0,0,.5);
+}
+.cat-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: .85;
+  transition: transform .4s ease, opacity .3s;
+}
+.cat-card:hover img { transform: scale(1.05); opacity: 1; }
+ 
+.cat-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6,13,26,.92) 0%, rgba(6,13,26,.3) 55%, transparent 100%);
+}
+.cat-label {
+  position: absolute;
+  bottom: 20px;
+  left: 22px;
+  z-index: 2;
+}
+ 
+.section-title {
+  display: inline-block;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #39b4ff;
+}
+
+.deal-section {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border-radius: 20px;
+}
+
+
+/* Footer */
+.footer-brand {
+  font-weight: 600;
+}
+
+.footer-desc {
+  font-size: 14px;
+  max-width: 400px;
+  opacity: 0.7;
+}
+
+.footer-heading {
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.footer-links li {
+  font-size: 14px;
+  margin-bottom: 6px;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.footer-links li:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}

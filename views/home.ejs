@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GadgetHub</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/homeStyle.css">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<%- include("./partials/userNavbar") %>
+
+<!-- HERO -->
+<section class="hero-section d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- LEFT CONTENT -->
+      <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0">
+
+        <h1 class="display-4 fw-bold text-light">
+          Future <br>
+          <span class="text-info">Precision.</span>
+        </h1>
+
+        <p class="text-secondary mt-3">
+          Discover the latest gadgets with cutting-edge technology.
+        </p>
+
+        <div class="mt-4 d-flex gap-3 justify-content-center justify-content-lg-start">
+          <a href="/shop" class="btn btn-info px-4 py-2">Featured Deals</a>
+          <a href="#" class="btn btn-secondary px-4 py-2">Learn More</a>
+        </div>
+      </div>
+
+      <!-- RIGHT IMAGE -->
+      <div class="col-lg-6 text-center">
+        <img src="/images/hero.webp" alt="Laptop" class="hero-img img-fluid">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="container" style="max-width:960px;">
+ 
+  <p class="section-title text-uppercase fw-bold text-white-50 small mb-4">Categories</p>
+ 
+  <div class="row g-3">
+ 
+    <!-- LEFT: Smartphones -->
+    <div class="col-12 col-md-6">
+      <a href="shop?page=1&search=&category=<%= smartphoneCategory?._id || '' %>&brand=&sort=newest">
+        <div class="cat-card h-100" style="min-height:420px;">
+          <img src="/images/phone.png" alt="Smartphones" style="height:100%;"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-label">
+            <div class="text-white fw-bold text-uppercase fs-2 lh-1">Smartphones</div>
+            <div class="text-info small mt-1">Explore Flagships →</div>
+          </div>
+        </div>
+      </a>
+    </div>
+ 
+    <!-- RIGHT: Laptops + Audio/Gaming -->
+    <div class="col-12 col-md-6 d-flex flex-column gap-3">
+ 
+      <!-- Laptops -->
+      <a href="shop?page=1&search=&category=<%= laptopCategory?._id || '' %>&brand=&sort=newest">
+        <div class="cat-card flex-fill" style="min-height:200px;">
+          <img src="/images/laptop.jpg" alt="Laptops"/>
+          <div class="cat-overlay"></div>
+          <div class="cat-label">
+            <div class="text-white fw-bold text-uppercase fs-4 lh-1">Laptops</div>
+            <div class="text-info small mt-1">Shop All →</div>
+          </div>
+        </div>
+      </a>
+ 
+      <!-- Audio + Gaming -->
+      <div class="row g-3 flex-fill">
+        
+        <!-- Audio -->
+        <div class="col-6">
+          <a href="shop?page=1&search=&category=<%= audioCategory?._id || '' %>&brand=&sort=newest">
+            <div class="cat-card h-100" style="min-height:160px;">
+              <img src="/images/audio.jpg" alt="Audio"/>
+              <div class="cat-overlay"></div>
+              <div class="cat-label">
+                <div class="text-white fw-bold text-uppercase fs-5 lh-1">Audio</div>
+                <div class="text-info small mt-1">Shop All →</div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Accessories -->
+        <div class="col-6">
+          <a href="shop?page=1&search=&category=<%= accessoriesCategory?._id || '' %>&brand=&sort=newest">
+            <div class="cat-card h-100" style="min-height:160px;">
+              <img src="/images/gaming.jpg" alt="Gaming"/>
+              <div class="cat-overlay"></div>
+              <div class="cat-label">
+                <div class="text-white fw-bold text-uppercase fs-5 lh-1">Accessories</div>
+                <div class="text-info small mt-1">Shop All →</div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+ 
+    </div><!-- /right col -->
+  </div><!-- /row -->
+</section>
+
+<!-- PRODUCTS -->
+<section class="container my-5">
+  <h5 class="mb-4">Featured Products</h5>
+
+  <div class="row g-4">
+
+    <!-- Product -->
+     <% products.forEach(product => { %>
+    <div class="col-md-3">
+      <div class="glass product-card text-center">
+        <img src="<%= product.images[0].url %>"
+              width="100" height="100"
+              style="object-fit:cover;border-radius:10px">
+        <h6><%= product.name %></h6>
+        <p class="price">₹<%= product.finalPrice %></p>
+        <a href="/product/<%= product._id %>" class="btn btn-info btn-sm">View Details</a>
+      </div>
+    </div>
+    <% }) %>
+
+  </div>
+</section>
+
+<!-- DEAL -->
+
+<section class="deal-section py-5 text-white">
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      <!-- LEFT CONTENT -->
+      <div class="col-12 col-md-6">
+        <p class="text-uppercase small text-info mb-2">Limited Time Offer</p>
+        
+        <h1 class="fw-bold display-6 display-md-4">
+          Deals Of<br> The Day
+        </h1>
+
+        <p class="text-secondary mt-3">
+          Our most coveted tech items, now at exclusive prices for the next 24 hours.
+        </p>
+
+        <!-- TIMER -->
+        <div class="d-flex gap-3 mt-3 fw-bold">
+          <div><span id="hours" class="fs-4">00</span><br><small>HOURS</small></div>
+          <div><span id="minutes" class="fs-4">00</span><br><small>MINS</small></div>
+          <div><span id="seconds" class="fs-4">00</span><br><small>SECS</small></div>
+        </div>
+
+        <button class="btn btn-light mt-4 px-4 py-2 fw-semibold">
+          SHOP THE SALE
+        </button>
+      </div>
+
+      <!-- RIGHT PRODUCT -->
+      <div class="col-12 col-md-6 text-center">
+
+        <div class="d-inline-block">
+          <img 
+            src="<%= products[2].images[0].url %>" 
+            class="img-fluid rounded-5"
+            alt="Product"
+          >
+        </div>
+
+        <h6 class="mt-3"><%= products[2].name %></h6>
+
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <span class="text-info fw-bold">₹<%= products[2].finalPrice %></span>
+          <small class="text-decoration-line-through text-secondary">₹<%= products[2].price %></small>
+          <span class="badge bg-danger">-<%=products[2].offerPercent%>%</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BRAND LOGOS -->
+<section class="container text-center brand-logos my-5">
+  <img src="images/apple.png" class="mx-3">
+  <img src="images/samsung.png" class="mx-3">
+  <img src="images/sony.png" class="mx-3">
+  <img src="images/dell.png" class="mx-3">
+</section>
+
+<!-- FOOTER -->
+<%- include("./partials/userFooter") %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/userHome.js"></script>
+</body>
+</html>

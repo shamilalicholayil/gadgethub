@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg py-3">
+  <div class="container">
+    <a class="navbar-brand text-info fw-bold">GADGETHUB</a>
+
+    <div class="ms-auto d-flex gap-3">
+      <a href="/home"
+        class="text-decoration-none text-info <%= currentPage === 'home' ? 'border-bottom pb-1' : '' %>">
+        Home
+      </a>
+
+      <a href="/shop"
+        class="text-decoration-none text-info <%= currentPage === 'shop' ? 'border-bottom pb-1' : '' %>">
+        Shop
+      </a>
+
+      <a href="/cart">
+        <i class="fa fa-cart-shopping"></i>
+        <span class="badge bg-info" id="navCartCount"><%= cartCount %></span>
+      </a>
+      <% if(user) { %>
+        <div class="dropdown">
+          <a href="#" class="text-info" data-bs-toggle="dropdown">
+            <i class="fa fa-user"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="/profile">
+                <i class="fa fa-user me-2"></i>Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/wishlist">
+                <i class="fa fa-heart me-2"></i>Wishlist
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/orders">
+                <i class="fa fa-box me-2"></i>Orders
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="/logout">
+                <i class="fa fa-right-from-bracket me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      <% } else { %>
+        <a href="/login" class="text-danger text-decoration-none">Login</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

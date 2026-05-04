@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+    <header class="d-flex justify-content-start p-4">
+        <h5 class="text-info fw-bold">GADGETHUB</h5>
+    </header>
+    <div class="d-flex justify-content-center align-items-center vh-75">
+        <div class="card glass p-4 rounded-4">
+            <div class="d-flex justify-content-center gap-4 mb-4 small">
+                <a href="/login" class="nav-link"><span class="text-secondary">Login</span>
+                <a href="#" class="nav-link"><span class="text-info border-bottom border-info pb-1">Register</span></a>
+            </div>
+            <form action="/register" method="POST">
+                <label class="form-label small text-secondary">USERNAME</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-black border-0 text-secondary">
+                        <i class="fa fa-person"></i>
+                    </span>
+                    <input type="text" name="name"
+                            class="form-control bg-black border-0 text-white"
+                            placeholder="username">
+                </div>
+                <label class="form-label small text-secondary">EMAIL ADDRESS</label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-black border-0 text-secondary">
+                        <i class="fa fa-envelope"></i>
+                    </span>
+                    <input type="email" name="email"
+                            class="form-control bg-black border-0 text-white"
+                            placeholder="name@example.com">
+                </div>
+                <div class="d-flex justify-content-between small text-secondary">
+                    <label>PASSWORD</label>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-black border-0 text-secondary">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    <input type="password" name="password"
+                            class="form-control bg-black border-0 text-white"
+                            placeholder="••••••••">
+                </div>
+                <div class="d-flex justify-content-between small text-secondary">
+                    <label>CONFIRM PASSWORD</label>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-black border-0 text-secondary">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                    <input type="password" name="confirmPassword"
+                            class="form-control bg-black border-0 text-white"
+                            placeholder="••••••••">
+                </div>
+                
+                <% if(error) { %>
+                    <p class="text-danger"><%= error %></p>
+                <% } %>
+                <button type="submit" class="btn btn-info w-100 fw-bold py-2 mt-2">Register</button>
+            </form>
+            <p class="text-center small text-secondary mt-3">
+                By continuing, you agree to
+                <span class="text-info">Terms of Excellence</span>
+            </p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between p-4 small text-secondary">
+        <div>
+            <strong>GadgetHub</strong><br>
+            © 2024 GADGETHUB OBSIDIAN
+        </div>
+
+        <div class="d-flex gap-3">
+            <span>PRIVACY</span>
+            <span>TERMS</span>
+            <span>SUPPORT</span>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

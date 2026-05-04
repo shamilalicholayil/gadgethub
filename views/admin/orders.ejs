@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="d-flex">
+        <%- include("../partials/adminSidebar") %>
+        <div class="flex-grow-1 p-4">
+            <div class="main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="text-info fw-bold">Order Management</h4>
+                </div>
+
+                <div class="glass p-4">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr class="text-secondary small">
+                                <th>ORDER ID</th>
+                                <th>CUSTOMER</th>
+                                <th>DATE</th>
+                                <th>TOTAL</th>
+                                <th>PAYMENT</th>
+                                <th>STATUS</th>
+                                <th>UPDATE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(orders.length === 0) { %>
+                                <tr>
+                                    <td colspan="7" class="text-center text-secondary py-4">No orders yet.</td>
+                                </tr>
+                            <% } else { %>
+                                <% orders.forEach(order => { %>
+                                    <tr>
+                                        <td class="text-secondary small">#<%= order._id.toString().slice(-6).toUpperCase() %></td>
+                                        <td>
+                                            <p class="mb-0 small"><%= order.user.name %></p>
+                                            <small class="text-secondary"><%= order.user.email %></small>
+                                        </td>
+                                        <td class="text-secondary small"><%= order.createdAt.toDateString() %></td>
+                                        <td class="text-info">₹<%= order.totalAmount %></td>
+                                        <td>
+                                            <span class="badge <%= order.paymentStatus === 'paid' ? 'bg-success' : 'bg-warning text-dark' %>">
+                                                <%= order.paymentMethod.toUpperCase() %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge
+                                                <% if(order.orderStatus === 'delivered') { %>bg-success
+                                                <% } else if(order.orderStatus === 'cancelled') { %>bg-danger
+                                                <% } else if(order.orderStatus === 'returned') { %>bg-secondary
+                                                <% } else { %>bg-warning text-dark<% } %>">
+                                                <%= order.orderStatus.toUpperCase() %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm statusSelect bg-dark text-white border-secondary"
+                                                    data-id="<%= order._id %>"
+                                                    <% if(order.orderStatus === 'cancelled' || order.orderStatus === 'returned') { %>disabled<% } %>>
+                                                <option value="pending"    <%= order.orderStatus === 'pending'    ? 'selected' : '' %>>Pending</option>
+                                                <option value="processing" <%= order.orderStatus === 'processing' ? 'selected' : '' %>>Processing</option>
+                                                <option value="shipped"    <%= order.orderStatus === 'shipped'    ? 'selected' : '' %>>Shipped</option>
+                                                <option value="delivered"  <%= order.orderStatus === 'delivered'  ? 'selected' : '' %>>Delivered</option>
+                                                <option value="cancelled"  <%= order.orderStatus === 'cancelled'  ? 'selected' : '' %>>Cancelled</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/js/adminOrders.js"></script>
+</body>
+</html>

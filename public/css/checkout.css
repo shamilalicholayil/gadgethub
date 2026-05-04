@@ -1,0 +1,120 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: #fff;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* ===== STEP INDICATOR ===== */
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.step-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+}
+.step.active .step-circle {
+    background: #38bdf8;
+    color: #000;
+}
+.step.active span {
+    color: #38bdf8;
+}
+
+/* ===== CARD ===== */
+.glass-card {
+    background: rgba(17, 28, 46, 0.85);
+    border-radius: 14px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ===== FORM ===== */
+label {
+    font-size: 11px;
+    color: #7c8aa5;
+    margin-bottom: 5px;
+}
+.form-control {
+    background: #050b18;
+    border: 1px solid #1e293b;
+    color: #fff;
+    height: 46px;
+}
+.form-control:focus {
+    border-color: #38bdf8;
+    box-shadow: none;
+}
+
+/* ===== PAYMENT ===== */
+.payment-option {
+    background: #0b1324;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.payment-option.active {
+    border-color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56,189,248,0.2);
+}
+.payment-option i {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+/* ===== SUMMARY ===== */
+.summary-card {
+    background: rgba(17, 28, 46, 0.9);
+    border-radius: 16px;
+    padding: 25px;
+}
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.total {
+    font-size: 20px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+/* ===== BUTTON ===== */
+.place-btn {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100%;
+}
+
+/* ===== FOOTER ===== */
+footer a:hover {
+    color: #38bdf8 !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 992px){
+    .summary-card {
+        margin-top: 20px;
+    }
+}

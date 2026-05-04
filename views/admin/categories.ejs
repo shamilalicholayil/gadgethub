@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <%- include("../partials/adminSidebar") %>
+
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex justify-content-between align-items-center p-4">
+                <h4 class="text-info fw-bold">Categories</h4>
+                <button type="button" class="btn btn-info"
+                        data-bs-toggle="modal" data-bs-target="#addCategoryModal"
+                        >Add Category +</button>
+            </div>
+
+            <div class="container mt-4">
+                <div class="row g-4" id="categoryTableBody">
+
+                    <% if(categories.length === 0) { %>
+                        <div class="text-center py-5 text-secondary">Category not found.</div>
+                    <% } else { %>
+
+                        <% categories.forEach(category => { %>
+                            <div class="col-md-4">
+                                <div class="card glass p-4 h-100">
+                                    <h5 class="fw-bold text-info mb-3"><%= category.name %></h5>
+                                    <h6 class="text-secondary mb-3"><%= category.description %></h6>
+                                    <% if (category.isActive) { %>
+                                        <span class="badge bg-success mb-3">Active</span>
+                                    <% } else { %>
+                                        <span class="badge bg-secondary mb-3">Inactive</span>
+                                    <% } %>
+
+                                    <div class="d-flex gap-2 mt-auto">
+
+                                            <button type="button" class="btn btn-sm btn-outline-info w-100 editBtn"
+                                                    data-id="<%= category._id %>"
+                                                    data-name="<%= category.name %>"
+                                                    data-description="<%= category.description %>">
+                                                    <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger w-100 deleteBtn"
+                                                    data-id="<%= category._id %>"
+                                                    data-active="<%= category.isActive %>">
+                                                    <% if (category.isActive) { %>
+                                                        <i class="fa fa-power-off"></i> Disable
+                                                    <% } else { %>
+                                                        <i class="fa fa-power-off"></i> Enable
+                                                    <% } %>
+                                            </button>
+
+                                        </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>        
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Model -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content glass-modal text-light">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-info fw-bold">
+                        <i class="fa fa-box me-2"></i>Add Category
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="text-secondary mb-3">Name</h6>
+                    <input type="text" 
+                        id="categoryNameInput" 
+                        class="form-control custom-input mb-3" 
+                        placeholder="Category name">
+                    <h6 class="text-secondary mb-3">Description</h6>
+                    <input type="text"
+                                id="categoryDescInput" 
+                                class="form-control custom-input mb-3"
+                                placeholder="Write a Short Description">
+                    <p id="categoryError" class="text-danger mt-2 d-none"></p>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-info" 
+                            id="saveCategoryBtn">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Category Model -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content glass-modal text-light">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-info fw-bold">
+                        <i class="fa fa-box me-2"></i>Edit Category
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="text-secondary mb-3">Name</h6>
+                    <input type="text"
+                            id="editCategoryInput"
+                            class="form-control custom-input mb-3"
+                            value="">
+                    <h6 class="text-secondary mb-3">Description</h6>
+                    <input type="text"
+                                id="editCategoryDescInput" 
+                                class="form-control custom-input"
+                                placeholder="Description">
+                    <p id="editCategoryError" class="text-danger mt-2 d-none"></p>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-info"
+                    id="saveEditCategoryBtn">Save</button>
+                </div>
+
+            </div>
+        </div>
+     </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/category.js"></script>
+</body>
+</html>

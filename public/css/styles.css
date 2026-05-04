@@ -1,0 +1,70 @@
+body {
+  background: radial-gradient(circle at 20% 20%, #0a1a2f, #020617);
+  min-height: 100vh;
+}
+
+.vh-75 {
+  height: 75vh;
+}
+
+.w-custom {
+    width: 170px;
+}
+
+.custom-color {
+  color: lightblue;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 200, 255, 0.15);
+  transition: 0.3s;
+}
+
+.glass:hover {
+  transform: translateY(-8px);
+}
+
+.table-transparant {
+  background-color: transparent;
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.table-transparant th{
+  background-color: transparent !important;
+  color: lightblue;
+}
+
+.table-transparant td {
+  background-color: transparent !important;
+  color: lightblue;
+  border: none;
+  padding: 15px;
+}
+
+.table-transparant:hover {
+  transform: scale(1.01);
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.15);
+}
+
+.custom-input {
+  background: #020617;
+  border: none;
+  color: white;
+  border-radius: 10px;
+}
+
+.custom-input:focus {
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
+  border: 1px solid #0dcaf0;
+}

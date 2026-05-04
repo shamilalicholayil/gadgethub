@@ -1,0 +1,28 @@
+.error-section {
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #0b1a3a, #050b1f);
+}
+
+/* BIG 404 TEXT */
+.error-code {
+  font-size: 120px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #5fd0ff, #3aa0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* subtle glow */
+.error-code {
+  text-shadow: 0 0 25px rgba(95, 208, 255, 0.3);
+}
+
+/* button tweaks */
+.btn-info {
+  background: linear-gradient(90deg, #5fd0ff, #3aa0ff);
+  border: none;
+}
+
+.btn-info:hover {
+  opacity: 0.9;
+}

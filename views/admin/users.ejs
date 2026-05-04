@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <%- include("../partials/adminSidebar") %>
+
+        <div class="flex-grow-1 p-4">
+            <div class="d-flex justify-content-between p-4">
+                <h4 class="text-info fw-bold">Users</h4>
+            </div>
+
+            <div class="container mt-4">
+                <table class="table table-transparant table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Block/Unblock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody">
+                        <% if(users.length === 0) { %>
+                            <tr>
+                                <td colspan="4" class="text-center py-3">User not found.</td>
+                            </tr>
+                        <% } else { %>
+                            <% users.forEach(user => { %>
+                                <tr>
+                                    <td><%= user.name %></td>
+                                    <td><%= user.email %></td>
+                                    <td>
+                                        <% if(user.isBlocked) { %>
+                                            <span class="badge bg-danger">Blocked</span>
+                                        <% } else { %>
+                                            <span class="badge bg-success">Active</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger blockBtn"
+                                            data-id="<%= user._id %>"
+                                            data-blocked="<%= user.isBlocked %>">
+                                            <i class="fa fa-power-off"></i>
+                                            <% if(user.isBlocked) { %>
+                                                Unblock
+                                            <% } else { %>
+                                                Block
+                                            <% } %>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center mt-3" id="paginationContainer"></ul>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/users.js"></script>
+</body>
+</html>
