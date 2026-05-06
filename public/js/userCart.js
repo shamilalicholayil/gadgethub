@@ -1,6 +1,49 @@
 const cartItems = document.getElementById("cartItems");
 const emptyCart = document.getElementById("emptyCart");
 
+function showToast(message) {
+    const toast = document.getElementById("cartToast");
+    const toastMessage = document.getElementById("cartToastMessage");
+    toast.className = `toast align-items-center text-white border-0 bg-danger`;
+    toastMessage.textContent = message;
+    new bootstrap.Toast(toast, { delay: 3000 }).show();
+}
+
+if(stockWarning) {
+    showToast("Some item quantities were adjusted to match available stock.");
+}
+
+function checkCartEmpty() {
+    const remaining = document.querySelectorAll("#cartItems .card").length;
+    if(remaining === 0) emptyCart.classList.remove("d-none");
+}
+
+function clearCouponUI() {
+    document.getElementById("couponInput").value = "";
+    const msgEl = document.getElementById("couponMessage");
+    msgEl.className = "small d-none";
+    msgEl.textContent = "";
+}
+
+function updateCouponUI(data) {
+    const msgEl = document.getElementById("couponMessage");
+    if(data.couponCleared) {
+        clearCouponUI();
+        document.getElementById("cartSubtotal").textContent = data.total;
+        document.getElementById("cartTotal").textContent = `₹${data.total}`;
+        showToast("Coupon removed — cart total fell below minimum order value.");
+    } else if(data.discountAmount > 0) {
+        document.getElementById("cartSubtotal").textContent = data.total;
+        document.getElementById("cartTotal").textContent = `₹${data.finalTotal}`;
+        msgEl.className = "small text-success";
+        msgEl.classList.remove("d-none");
+        msgEl.textContent = `🎉 Coupon applied! You saved ₹${data.discountAmount}`;
+    } else {
+        document.getElementById("cartSubtotal").textContent = data.total;
+        document.getElementById("cartTotal").textContent = `₹${data.total}`;
+    }
+}
+
 // Quantity Update
 document.querySelectorAll(".btn-qty").forEach(btn => {
     btn.addEventListener("click", async () => {
@@ -16,22 +59,18 @@ document.querySelectorAll(".btn-qty").forEach(btn => {
             if(data.success) {
                 if(data.removed) {
                     btn.closest(".card").remove();
-                    if(document.querySelectorAll("#cartItems .card").length === 0) {
-                        document.getElementById("emptyCart").classList.remove("d-none");
-                    }
+                    checkCartEmpty();
                 } else {
                     btn.parentElement.querySelector("span").textContent = data.newQuantity;
                 }
                 const counter = document.getElementById("navCartCount");
                 if(counter) counter.textContent = data.cartCount;
-
-                document.getElementById("cartSubtotal").textContent = data.total;
-                document.getElementById("cartTotal").textContent = `₹${data.total}`;
+                updateCouponUI(data);
             } else {
-                alert(data.message);
+                showToast(data.message);
             }
         } catch(error) {
-            alert("Something went wrong.");
+            showToast("Something went wrong.");
         }
     });
 });
@@ -45,19 +84,15 @@ document.querySelectorAll(".remove-btn").forEach(btn => {
             const data = await response.json();
             if(data.success) {
                 btn.closest(".card").remove();
-                if(document.querySelectorAll("#cartItems .card").length === 0) {
-                    document.getElementById("emptyCart").classList.remove("d-none");
-                }
+                checkCartEmpty();
                 const counter = document.getElementById("navCartCount");
                 if(counter) counter.textContent = data.cartCount;
-
-                document.getElementById("cartSubtotal").textContent = data.total;
-                document.getElementById("cartTotal").textContent = `₹${data.total}`;
+                updateCouponUI(data);
             } else {
-                alert(data.message);
+                showToast(data.message);
             }
         } catch(error) {
-            alert("Something went wrong.");
+            showToast("Something went wrong.");
         }
     });
 });
@@ -65,7 +100,6 @@ document.querySelectorAll(".remove-btn").forEach(btn => {
 // Apply Coupon
 document.getElementById("applyCouponBtn").addEventListener("click", async () => {
     const code = document.getElementById("couponInput").value.trim();
-
     const orderTotal = document.getElementById("cartSubtotal").textContent.replace("₹", "");
     const msgEl = document.getElementById("couponMessage");
 

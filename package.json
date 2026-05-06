@@ -22,6 +22,7 @@
     "mongoose": "^9.3.2",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.7",
+    "puppeteer": "^24.43.0",
     "razorpay": "^2.9.6"
   },
   "devDependencies": {

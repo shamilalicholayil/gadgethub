@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const User = require("../models/User");
 const Wallet = require("../models/Wallet");
 const bcrypt = require("bcrypt");
@@ -11,18 +13,26 @@ const getRegister = (req, res) => {
 const postRegister = async (req, res) => {
     const name = req.body.name?.trim();
     const email = req.body.email?.trim();
-    const password = req.body.password?.trim();
-    const confirmPassword = req.body.confirmPassword?.trim();
-    if(!name || !email || !password || !confirmPassword) {
-        return res.render("register", { error: "A field is empty." });
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+
+    if (!name || !email || !password || !confirmPassword) {
+        return res.render("register", { error: "All fields are required." });
     }
-    if(password !== confirmPassword) {
-        return res.render("register", { error: "Password should match confirm password." });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.render("register", { error: "Invalid email format." });
     }
+    if (password.length < 8) {
+        return res.render("register", { error: "Password must be at least 8 characters." });
+    }
+    if (password !== confirmPassword) {
+        return res.render("register", { error: "Passwords do not match." });
+    }
+
     try {
         const existingUser = await User.findOne({ email });
-        if(existingUser) {
-            return res.render("register", { error: "Email already exists." });
+        if (existingUser) {
+            return res.render("register", { error: "Email already registered." });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashedPassword });
@@ -30,9 +40,9 @@ const postRegister = async (req, res) => {
         await Wallet.create({ user: user._id, balance: 0, transactions: [] });
         res.redirect("/login");
     } catch (error) {
-        res.render("register", { error: "Something went wrong. Try again."})
+        res.render("register", { error: "Something went wrong. Try again." });
     }
-}
+};
 
 const getLogin = (req, res) => {
     if(req.session.user) {
@@ -42,29 +52,44 @@ const getLogin = (req, res) => {
 }
 
 const postLogin = async (req, res) => {
-    const { email, password } = req.body;
+    const email    = req.body.email?.trim().toLowerCase();
+    const password = req.body.password;
+
+    if (!email || !password) {
+        return res.render("login", { error: "Email and password are required." });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.render("login", { error: "Enter a valid email address." });
+    }
+
     try {
         const user = await User.findOne({ email });
-        if(!user) {
+        if (!user) {
             return res.render("login", { error: "Invalid email or password." });
         }
+
         const match = await bcrypt.compare(password, user.password);
-        if(!match) {
-            return res.render("login", { error: "Invalid email or password."})
+        if (!match) {
+            return res.render("login", { error: "Invalid email or password." });
         }
-        if(user.isBlocked) {
+
+        if (user.isBlocked) {
             return res.render("login", { error: "Your account has been blocked." });
         }
+
         req.session.user = {
-            _id: user._id,
-            name: user.name,
+            _id:   user._id,
+            name:  user.name,
             email: user.email
-        }
+        };
+
         res.redirect("/home");
+
     } catch (error) {
-        res.render("login", { error: "Something went wrong. Try again."})
+        res.render("login", { error: "Something went wrong. Try again." });
     }
-}
+};
 
 const userLogout = (req, res) => {
     req.session.destroy(() => {
@@ -79,27 +104,40 @@ const getForgotPassword = (req, res) => {
 
 const getResetPassword = async (req, res) => {
     const { token } = req.params;
-    const user = await User.findOne({ 
-        resetToken: token, 
-        resetTokenExpiry: { $gt: new Date() } 
-    });
-    if(!user) return res.render("forgotPassword", { error: "Link expired or invalid." });
-    res.render("resetPassword", { token });
+    try {
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: new Date() }
+        });
+        if(!user) return res.render("forgotPassword", { error: "Link expired or invalid." });
+        res.render("resetPassword", { token });
+    } catch(error) {
+        res.render("forgotPassword", { error: "Something went wrong." });
+    }
 };
 
 const sendResetEmail = async (req, res) => {
-    const { email } = req.body;
+    const email = req.body.email?.trim();
+
+    if(!email) {
+        return res.render("forgotPassword", { error: "Email is required." });
+    }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.render("forgotPassword", { error: "Enter a valid email address." });
+    }
+
     try {
         const user = await User.findOne({ email });
-        if(!user) return res.redirect("/login");
 
-        // Generate token
+        if(!user) {
+            return res.render("forgotPassword", { message: "If this email is registered, a reset link has been sent." });
+        }
+
         const token = crypto.randomBytes(32).toString("hex");
         user.resetToken = token;
-        user.resetTokenExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+        user.resetTokenExpiry = new Date(Date.now() + 10 * 60 * 1000);
         await user.save();
 
-        // Send email
         await transporter.sendMail({
             from: process.env.MAIL_USER,
             to: email,
@@ -107,36 +145,47 @@ const sendResetEmail = async (req, res) => {
             html: `
                 <h3>Password Reset Request</h3>
                 <p>Click the link below to reset your password. Link expires in 10 minutes.</p>
-                <a href="http://localhost:3000/reset-password/${token}">Reset Password</a>
+                <a href="${process.env.BASE_URL}/reset-password/${token}">Reset Password</a>
             `
         });
 
-        res.render("forgotPassword", { message: "Reset link sent to your email." });
-    } catch(error) {
-        console.log(error);
+        res.render("forgotPassword", { message: "If this email is registered, a reset link has been sent." });
+    } catch (error) {
         res.render("forgotPassword", { error: "Something went wrong." });
     }
-}
+};
 
 const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
+
+    if(!password || password.length < 8) {
+        return res.render("resetPassword", { token, error: "Password must be at least 8 characters." });
+    }
+    if(!/[A-Z]/.test(password)) {
+        return res.render("resetPassword", { token, error: "Password must include at least one uppercase letter." });
+    }
+    if(!/[0-9]/.test(password)) {
+        return res.render("resetPassword", { token, error: "Password must include at least one number." });
+    }
+
     try {
-        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: new Date() } });
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: new Date() }
+        });
         if(!user) return res.render("forgotPassword", { error: "Link expired or invalid." });
 
-        const hashed = await bcrypt.hash(password, 10);
-        
-        user.password = hashed;
+        user.password = await bcrypt.hash(password, 10);
         user.resetToken = undefined;
         user.resetTokenExpiry = undefined;
         await user.save();
 
         res.redirect("/login");
-    } catch(error) {
+    } catch (error) {
         res.render("forgotPassword", { error: "Something went wrong." });
     }
-}
+};
 
 module.exports = {
     getRegister,

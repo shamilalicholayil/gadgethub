@@ -1,3 +1,4 @@
+// Toast
 function showToast(message, type = "success") {
     const toast = document.getElementById("toast");
     const toastMessage = document.getElementById("toastMessage");
@@ -6,10 +7,63 @@ function showToast(message, type = "success") {
     new bootstrap.Toast(toast, { delay: 3000 }).show();
 }
 
+// --- Validators --- //
+function validateName(name) {
+    if(!name) return "Full name is required.";
+    if(name.length < 3) return "Name must be at least 3 characters.";
+    if(!/^[a-zA-Z\s]+$/.test(name)) return "Name can only contain letters and spaces.";
+    return null;
+}
+
+function validateEmail(email) {
+    if(!email) return "Email is required.";
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address.";
+    return null;
+}
+
+function validatePhone(phone) {
+    if(!phone) return "Phone number is required.";
+    if(!/^\d{10}$/.test(phone)) return "Enter a valid 10-digit phone number.";
+    return null;
+}
+
+function validatePincode(pincode) {
+    if(!pincode) return "Pincode is required.";
+    if(!/^\d{6}$/.test(pincode)) return "Enter a valid 6-digit pincode.";
+    return null;
+}
+
+function validatePassword(password) {
+    if(!password) return "Password is required.";
+    if(password.length < 8) return "Password must be at least 8 characters.";
+    if(!/[A-Z]/.test(password)) return "Include at least one uppercase letter.";
+    if(!/[0-9]/.test(password)) return "Include at least one number.";
+    return null;
+}
+
+function validateAddressFields(fields) {
+    if(!fields.fullName) return "Full name is required.";
+    if(fields.fullName.length < 3) return "Name must be at least 3 characters.";
+    const phoneErr = validatePhone(fields.phone);
+    if(phoneErr) return phoneErr;
+    if(!fields.address) return "Address is required.";
+    if(!fields.city) return "City is required.";
+    if(!fields.state) return "State is required.";
+    const pincodeErr = validatePincode(fields.pincode);
+    if (pincodeErr) return pincodeErr;
+    return null;
+}
+
 // Edit Profile
 document.getElementById("saveProfileBtn").addEventListener("click", async () => {
     const name = document.getElementById("editName").value.trim();
     const email = document.getElementById("editEmail").value.trim();
+
+    const nameErr = validateName(name);
+    if(nameErr) return showToast(nameErr, "danger");
+    const emailErr = validateEmail(email);
+    if(emailErr) return showToast(emailErr, "danger");
+
     const res = await fetch("/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -25,7 +79,13 @@ document.getElementById("savePasswordBtn").addEventListener("click", async () =>
     const currentPassword = document.getElementById("currentPassword").value;
     const newPassword = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if(!currentPassword) return showToast("Current password is required.", "danger");
+    const newPassErr = validatePassword(newPassword);
+    if(newPassErr) return showToast(newPassErr, "danger");
     if(newPassword !== confirmPassword) return showToast("Passwords don't match.", "danger");
+    if(newPassword === currentPassword) return showToast("New password must be different from current.", "danger");
+
     const res = await fetch("/profile/password", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -46,6 +106,10 @@ document.getElementById("saveAddressBtn").addEventListener("click", async () => 
         state: document.getElementById("addrState").value.trim(),
         pincode: document.getElementById("addrPincode").value.trim()
     };
+
+    const err = validateAddressFields(body);
+    if(err) return showToast(err, "danger");
+
     const res = await fetch("/profile/address", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,7 +120,7 @@ document.getElementById("saveAddressBtn").addEventListener("click", async () => 
     if(data.success) setTimeout(() => location.reload(), 1000);
 });
 
-// Edit Address pre-fill value
+// Edit Address Pre-fill
 document.querySelectorAll(".editAddressBtn").forEach(btn => {
     btn.addEventListener("click", () => {
         document.getElementById("editAddrId").value = btn.dataset.id;
@@ -72,7 +136,7 @@ document.querySelectorAll(".editAddressBtn").forEach(btn => {
 
 // Update Address
 document.getElementById("updateAddressBtn").addEventListener("click", async () => {
-    const id = document.getElementById("editAddrId").value;
+    const id   = document.getElementById("editAddrId").value;
     const body = {
         fullName: document.getElementById("editAddrFullName").value.trim(),
         phone: document.getElementById("editAddrPhone").value.trim(),
@@ -81,6 +145,10 @@ document.getElementById("updateAddressBtn").addEventListener("click", async () =
         state: document.getElementById("editAddrState").value.trim(),
         pincode: document.getElementById("editAddrPincode").value.trim()
     };
+
+    const err = validateAddressFields(body);
+    if(err) return showToast(err, "danger");
+
     const res = await fetch(`/profile/address/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

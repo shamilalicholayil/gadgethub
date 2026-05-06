@@ -8,6 +8,7 @@ const Order = require("../models/Order");
 const bcrypt = require("bcrypt");
 const cloudinary = require("../config/cloudinary");
 const uploadToCloudinary = require("../utils/uploadToCloudinary");
+const puppeteer = require("puppeteer");
 
 const getLogin = (req, res) => {
     if(req.session.admin){
@@ -17,26 +18,31 @@ const getLogin = (req, res) => {
 }
 
 const postLogin = async (req, res) => {
-    const { email, password } = req.body;
+    const email = req.body.email?.trim();
+    const password = req.body.password;
+
+    if (!email || !password) {
+        return res.render("admin/login", { error: "Email and password are required." });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.render("admin/login", { error: "Enter a valid email address." });
+    }
+
     try {
         const admin = await Admin.findOne({ email });
-        if(!admin) {
+        if (!admin) {
             return res.render("admin/login", { error: "Invalid email or password." });
         }
         const authorize = await bcrypt.compare(password, admin.password);
-        if(!authorize) {
+        if (!authorize) {
             return res.render("admin/login", { error: "Invalid email or password." });
         }
-        req.session.admin = {
-            _id: admin._id,
-            name: admin.name,
-            email: admin.email
-        }
+        req.session.admin = { _id: admin._id, name: admin.name, email: admin.email };
         res.redirect("/admin/dashboard");
     } catch (error) {
         res.render("admin/login", { error: "Something went wrong. Try again." });
     }
-}
+};
 
 const adminLogout = (req, res) => {
     req.session.destroy(() => {
@@ -52,19 +58,28 @@ const getDashboard = async (req, res) => {
         const totalBrands = await Brand.countDocuments();
         const totalOrders = await Order.countDocuments();
 
-        // Revenue
         const revenueData = await Order.aggregate([
             { $match: { orderStatus: { $nin: ["cancelled", "returned"] } } },
             { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
         ]);
         const totalRevenue = revenueData[0]?.totalRevenue || 0;
 
-        // Orders by status
         const ordersByStatus = await Order.aggregate([
             { $group: { _id: "$orderStatus", count: { $sum: 1 } } }
         ]);
 
-        // Monthly sales (last 6 months)
+        // Daily
+        const dailySales = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ["cancelled", "returned"] }, createdAt: { $gte: new Date(new Date().setDate(new Date().getDate() - 30)) } } },
+            { $group: {
+                _id: { day: { $dayOfMonth: "$createdAt" }, month: { $month: "$createdAt" } },
+                revenue: { $sum: "$totalAmount" },
+                orders: { $sum: 1 }
+            }},
+            { $sort: { "_id.month": 1, "_id.day": 1 } }
+        ]);
+
+        // Monthly (last 12 months)
         const monthlySales = await Order.aggregate([
             { $match: { orderStatus: { $nin: ["cancelled", "returned"] } } },
             { $group: {
@@ -73,18 +88,163 @@ const getDashboard = async (req, res) => {
                 orders: { $sum: 1 }
             }},
             { $sort: { "_id.year": 1, "_id.month": 1 } },
-            { $limit: 6 }
+            { $limit: 12 }
         ]);
 
-        res.render("admin/dashboard", { 
-            totalUsers, totalProducts, totalBrands, 
+        // 6 months
+        const sixMonthSales = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ["cancelled", "returned"] }, createdAt: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 6)) } } },
+            { $group: {
+                _id: { month: { $month: "$createdAt" }, year: { $year: "$createdAt" } },
+                revenue: { $sum: "$totalAmount" },
+                orders: { $sum: 1 }
+            }},
+            { $sort: { "_id.year": 1, "_id.month": 1 } }
+        ]);
+
+        // Yearly
+        const yearlySales = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ["cancelled", "returned"] } } },
+            { $group: {
+                _id: { year: { $year: "$createdAt" } },
+                revenue: { $sum: "$totalAmount" },
+                orders: { $sum: 1 }
+            }},
+            { $sort: { "_id.year": 1 } }
+        ]);
+
+        // Top 5 products
+        const topProducts = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ["cancelled", "returned"] } } },
+            { $unwind: "$items" },
+            { $group: { _id: "$items.product", totalSold: { $sum: "$items.quantity" }, revenue: { $sum: { $multiply: ["$items.price", "$items.quantity"] } } } },
+            { $sort: { totalSold: -1 } },
+            { $limit: 5 },
+            { $lookup: { from: "products", localField: "_id", foreignField: "_id", as: "product" } },
+            { $unwind: "$product" },
+            { $project: { name: "$product.name", totalSold: 1, revenue: 1 } }
+        ]);
+
+        // Category wise sales
+        const categorySales = await Order.aggregate([
+            { $match: { orderStatus: { $nin: ["cancelled", "returned"] } } },
+            { $unwind: "$items" },
+            { $lookup: { from: "products", localField: "items.product", foreignField: "_id", as: "product" } },
+            { $unwind: "$product" },
+            { $lookup: { from: "categories", localField: "product.category", foreignField: "_id", as: "category" } },
+            { $unwind: "$category" },
+            { $group: { _id: "$category.name", revenue: { $sum: { $multiply: ["$items.price", "$items.quantity"] } } } },
+            { $sort: { revenue: -1 } }
+        ]);
+
+        res.render("admin/dashboard", {
+            totalUsers, totalProducts, totalBrands,
             totalOrders, totalRevenue,
-            ordersByStatus, monthlySales
+            ordersByStatus, monthlySales,
+            dailySales, sixMonthSales, yearlySales,
+            topProducts, categorySales
         });
     } catch(error) {
         res.render("admin/dashboard", { error: "Something went wrong." });
     }
 }
+
+const downloadReport = async (req, res) => {
+    const { range, startDate, endDate } = req.query;
+    try {
+        let matchStage = { orderStatus: { $nin: ["cancelled", "returned"] } };
+
+        const now = new Date();
+        if (range === "day") {
+            matchStage.createdAt = { $gte: new Date(now.setHours(0, 0, 0, 0)) };
+        } else if (range === "week") {
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            matchStage.createdAt = { $gte: weekAgo };
+        } else if (range === "month") {
+            const monthAgo = new Date();
+            monthAgo.setMonth(monthAgo.getMonth() - 1);
+            matchStage.createdAt = { $gte: monthAgo };
+        } else if (range === "year") {
+            const yearAgo = new Date();
+            yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+            matchStage.createdAt = { $gte: yearAgo };
+        } else if (range === "custom" && startDate && endDate) {
+            matchStage.createdAt = {
+                $gte: new Date(startDate),
+                $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
+            };
+        }
+
+        const orders = await Order.find(matchStage)
+            .populate("user", "name email")
+            .sort({ createdAt: -1 });
+
+        const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);
+
+        const rows = orders.map(o => `
+            <tr>
+                <td>${o._id}</td>
+                <td>${o.user?.name || "N/A"}</td>
+                <td>${o.user?.email || "N/A"}</td>
+                <td>₹${o.totalAmount}</td>
+                <td>${o.orderStatus}</td>
+                <td>${o.paymentMethod}</td>
+                <td>${new Date(o.createdAt).toLocaleDateString("en-IN")}</td>
+            </tr>
+        `).join("");
+
+        const html = `
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h2 { color: #0891b2; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th { background: #0891b2; color: white; padding: 10px; text-align: left; }
+                    td { padding: 8px 10px; border-bottom: 1px solid #ddd; font-size: 12px; }
+                    tr:nth-child(even) { background: #f8fafc; }
+                    .summary { margin-bottom: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; }
+                </style>
+            </head>
+            <body>
+                <h2>GadgetHub — Sales Report</h2>
+                <div class="summary">
+                    <strong>Period:</strong> ${range === "custom" ? `${startDate} to ${endDate}` : range}<br>
+                    <strong>Total Orders:</strong> ${orders.length}<br>
+                    <strong>Total Revenue:</strong> ₹${totalRevenue}
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th><th>Customer</th><th>Email</th>
+                            <th>Amount</th><th>Status</th><th>Payment</th><th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </body>
+            </html>
+        `;
+
+        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: "load" });
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: { top: "20px", bottom: "20px", left: "20px", right: "20px" }
+        });
+        await browser.close();
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename=report-${range}-${Date.now()}.pdf`);
+        res.send(pdfBuffer);
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Something went wrong." });
+    }
+};
 
 const getUsers = async (req, res) => {
     try {
@@ -126,7 +286,7 @@ const addBrand = async (req, res) => {
         return res.json({ success: false, message: "A field is empty." });
     }
     try {
-        const existingBrand = await Brand.findOne({ name });
+        const existingBrand = await Brand.findOne({ name: { $regex: `^${name}$`, $options: "i" } });
         if(existingBrand) {
             return res.json({ success: false, message: "Brand already exists." })
         }
@@ -200,7 +360,7 @@ const addCategory = async (req, res) => {
         return res.json({ success: false, message: "A field is empty." });
     }
     try {
-        const existingCategory = await Category.findOne({ name });
+        const existingCategory = await Category.findOne({ name: { $regex: `^${name}$`, $options: "i" } });
         if(existingCategory) {
             return res.json({ success: false, message: "Category already exists." });
         }
@@ -277,15 +437,35 @@ const getCoupons = async (req, res) => {
 }
 
 const addCoupon = async (req, res) => {
-    const code = req.body.code?.trim();
+    const code = req.body.code?.trim().toUpperCase();
     const discountType = req.body.discountType?.trim();
-    const discountValue = req.body.discountValue?.trim();
-    const minOrderValue = req.body.minOrderValue?.trim();
+    const discountValue = parseFloat(req.body.discountValue);
+    const minOrderValue = parseFloat(req.body.minOrderValue);
     const expiryDate = req.body.expiryDate?.trim();
-    const usageLimit = req.body.usageLimit?.trim();
-    if(!code || !discountType || !discountValue || !minOrderValue || !expiryDate || !usageLimit) {
-        return res.json({ success: false, message: "A field is empty." });
+    const usageLimit = parseInt(req.body.usageLimit);
+
+    if(!code || !discountType || !expiryDate) {
+        return res.json({ success: false, message: "All fields are required." });
     }
+    if(!["percent", "flat"].includes(discountType)) {
+        return res.json({ success: false, message: "Invalid discount type." });
+    }
+    if(isNaN(discountValue) || discountValue <= 0) {
+        return res.json({ success: false, message: "Discount value must be a positive number." });
+    }
+    if(discountType === "percent" && discountValue > 100) {
+        return res.json({ success: false, message: "Percentage discount cannot exceed 100." });
+    }
+    if(isNaN(minOrderValue) || minOrderValue < 0) {
+        return res.json({ success: false, message: "Invalid minimum order value." });
+    }
+    if(isNaN(usageLimit) || usageLimit < 1) {
+        return res.json({ success: false, message: "Usage limit must be at least 1." });
+    }
+    if(new Date(expiryDate) <= new Date()) {
+        return res.json({ success: false, message: "Expiry date must be in the future." });
+    }
+
     try {
         const existingCoupon = await Coupon.findOne({ code: { $regex: `^${code}$`, $options: "i" } });
         if(existingCoupon) {
@@ -295,36 +475,52 @@ const addCoupon = async (req, res) => {
         await coupon.save();
         res.json({ success: true, message: "Coupon added successfully." });
     } catch (error) {
-        console.log(error);
         res.json({ success: false, message: "Something went wrong." });
     }
-}
+};
 
 const editCoupon = async (req, res) => {
     const { id } = req.params;
-    const code = req.body.code?.trim();
+    const code = req.body.code?.trim().toUpperCase();
     const discountType = req.body.discountType?.trim();
-    const discountValue = req.body.discountValue?.trim();
-    const minOrderValue = req.body.minOrderValue?.trim();
+    const discountValue = parseFloat(req.body.discountValue);
+    const minOrderValue = parseFloat(req.body.minOrderValue);
     const expiryDate = req.body.expiryDate?.trim();
-    const usageLimit = req.body.usageLimit?.trim();
+    const usageLimit = parseInt(req.body.usageLimit);
     const { isActive } = req.body;
-    if(!code || !discountType || !discountValue || !minOrderValue || !expiryDate || !usageLimit) {
-        return res.json({ success: false, message: "A field is empty." });
-    }
-    try {
-        const exists = await Coupon.findOne({ code: { $regex: `^${code}$`, $options: "i" }, _id: { $ne: id }});
-        if(exists) return res.json({ success: false, message: "Already exists" });
 
-        const updatedCoupon = await Coupon.findByIdAndUpdate(id, { $set: { code, discountType, discountValue, minOrderValue, expiryDate, usageLimit, isActive }});
+    if(!code || !discountType || !expiryDate) {
+        return res.json({ success: false, message: "All fields are required." });
+    }
+    if(!["percent", "flat"].includes(discountType)) {
+        return res.json({ success: false, message: "Invalid discount type." });
+    }
+    if(isNaN(discountValue) || discountValue <= 0) {
+        return res.json({ success: false, message: "Discount value must be a positive number." });
+    }
+    if(discountType === "percent" && discountValue > 100) {
+        return res.json({ success: false, message: "Percentage discount cannot exceed 100." });
+    }
+    if(isNaN(minOrderValue) || minOrderValue < 0) {
+        return res.json({ success: false, message: "Invalid minimum order value." });
+    }
+    if(isNaN(usageLimit) || usageLimit < 1) {
+        return res.json({ success: false, message: "Usage limit must be at least 1." });
+    }
+
+    try {
+        const exists = await Coupon.findOne({ code: { $regex: `^${code}$`, $options: "i" }, _id: { $ne: id } });
+        if(exists) return res.json({ success: false, message: "Coupon code already in use." });
+
+        const updatedCoupon = await Coupon.findByIdAndUpdate(id, { $set: { code, discountType, discountValue, minOrderValue, expiryDate, usageLimit, isActive } });
         if(!updatedCoupon) {
             return res.json({ success: false, message: "Coupon not found." });
         }
-        res.json({ success: true, message: "Coupon updated successfully." })
+        res.json({ success: true, message: "Coupon updated successfully." });
     } catch (error) {
         res.json({ success: false, message: "Something went wrong." });
     }
-}
+};
 
 const deleteCoupon = async (req, res) => {
     const { id } = req.params;
@@ -373,14 +569,22 @@ const getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
     const name = req.body.name?.trim();
     const description = req.body.description?.trim();
-    const price = req.body.price?.trim();
-    const stock = req.body.stock?.trim();
+    const price = parseFloat(req.body.price);
+    const stock = parseInt(req.body.stock);
     const { brand, category } = req.body;
-    const finalPrice = Number(price);
+    const hasOffer = req.body.hasOffer === "on";
+    const offerPercent = hasOffer ? parseFloat(req.body.offerPercent) || 0 : 0;
 
-    if(!name || !description || !price || !stock || !brand || !category) {
-        return res.json({ success: false, message: "A field is empty." });
+    if(!name || !description || !brand || !category) {
+        return res.json({ success: false, message: "All fields are required." });
     }
+    if(isNaN(price) || price <= 0) {
+        return res.json({ success: false, message: "Price must be a positive number." });
+    }
+    if(isNaN(stock) || stock < 0) {
+        return res.json({ success: false, message: "Stock must be 0 or more." });
+    }
+
     try {
         const images = [];
         for(let i = 0; i <= 4; i++) {
@@ -391,21 +595,23 @@ const addProduct = async (req, res) => {
             const result = await uploadToCloudinary(buffer, mimetype);
             images.push({ url: result.secure_url, public_id: result.public_id });
         }
+
         const isExists = await Product.findOne({ name: { $regex: `^${name}$`, $options: "i" } });
         if(isExists) {
             return res.json({ success: false, message: "Product already exists." });
         }
+
         const finalPrice = hasOffer && offerPercent > 0
-            ? Math.round(Number(price) - (Number(price) * offerPercent / 100))
+            ? Math.round(price - (price * offerPercent / 100))
             : price;
 
-        const product = new Product({ name, description, price, finalPrice, stock, brand, category, images });
+        const product = new Product({ name, description, price, finalPrice, stock, brand, category, images, hasOffer, offerPercent });
         await product.save();
         res.json({ success: true, message: "Product added successfully." });
     } catch (error) {
         res.json({ success: false, message: "Something went wrong." });
     }
-}
+};
 
 const editProduct = async (req, res) => {
     const { id } = req.params;
@@ -463,10 +669,10 @@ const deleteProduct = async (req, res) => {
         if(product.isActive === false) {
             const category = await Category.findById(product.category);
             const brand = await Brand.findById(product.brand);
-            if(!category.isActive) {
+            if(!category || !category.isActive) {
                 return res.json({ success: false, message: "Cannot enable product while its category is disabled." });
             }
-            if(!brand.isActive) {
+            if(!brand || !brand.isActive) {
                 return res.json({ success: false, message: "Cannot enable product while its brand is disabled." });
             }
         }
@@ -491,23 +697,29 @@ const getAdminOrders = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
     const orderId = req.params.id;
     const { orderStatus } = req.body;
+
+    const allowedStatuses = ["pending", "processing", "shipped", "delivered", "cancelled", "returned"];
+    if(!orderStatus || !allowedStatuses.includes(orderStatus)) {
+        return res.json({ success: false, message: "Invalid order status." });
+    }
+
     try {
         const order = await Order.findById(orderId);
         if(!order) return res.json({ success: false, message: "Order not found." });
         order.orderStatus = orderStatus;
         await order.save();
-        const msg = `Order status changed to ${orderStatus}.`;
-        res.json({ success: true, message: msg, orderStatus: order.orderStatus });
+        res.json({ success: true, message: `Order status changed to ${orderStatus}.`, orderStatus: order.orderStatus });
     } catch (error) {
         res.json({ success: false, message: "Something went wrong." });
     }
-}
+};
 
 module.exports = {
     getLogin,
     postLogin,
     adminLogout,
     getDashboard,
+    downloadReport,
 
     getUsers,
     blockUser,

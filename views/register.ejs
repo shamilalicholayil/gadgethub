@@ -15,51 +15,54 @@
     <div class="d-flex justify-content-center align-items-center vh-75">
         <div class="card glass p-4 rounded-4">
             <div class="d-flex justify-content-center gap-4 mb-4 small">
-                <a href="/login" class="nav-link"><span class="text-secondary">Login</span>
+                <a href="/login" class="nav-link"><span class="text-secondary">Login</span></a>
                 <a href="#" class="nav-link"><span class="text-info border-bottom border-info pb-1">Register</span></a>
             </div>
-            <form action="/register" method="POST">
+            <form action="/register" method="POST" id="registerForm" novalidate>
                 <label class="form-label small text-secondary">USERNAME</label>
-                <div class="input-group mb-3">
+                <div class="input-group mb-1">
                     <span class="input-group-text bg-black border-0 text-secondary">
                         <i class="fa fa-person"></i>
                     </span>
-                    <input type="text" name="name"
+                    <input type="text" id="name" name="name"
                             class="form-control bg-black border-0 text-white"
                             placeholder="username">
                 </div>
+                <span class="text-danger small d-block mb-3" id="nameError"></span>
+
                 <label class="form-label small text-secondary">EMAIL ADDRESS</label>
-                <div class="input-group mb-3">
+                <div class="input-group mb-1">
                     <span class="input-group-text bg-black border-0 text-secondary">
                         <i class="fa fa-envelope"></i>
                     </span>
-                    <input type="email" name="email"
+                    <input type="email" id="email" name="email"
                             class="form-control bg-black border-0 text-white"
                             placeholder="name@example.com">
                 </div>
-                <div class="d-flex justify-content-between small text-secondary">
-                    <label>PASSWORD</label>
-                </div>
-                <div class="input-group mb-3">
+                <span class="text-danger small d-block mb-3" id="emailError"></span>
+
+                <label class="form-label small text-secondary">PASSWORD</label>
+                <div class="input-group mb-1">
                     <span class="input-group-text bg-black border-0 text-secondary">
                         <i class="fa fa-lock"></i>
                     </span>
-                    <input type="password" name="password"
+                    <input type="password" id="password" name="password"
                             class="form-control bg-black border-0 text-white"
                             placeholder="••••••••">
                 </div>
-                <div class="d-flex justify-content-between small text-secondary">
-                    <label>CONFIRM PASSWORD</label>
-                </div>
-                <div class="input-group mb-3">
+                <span class="text-danger small d-block mb-3" id="passwordError"></span>
+
+                <label class="form-label small text-secondary">CONFIRM PASSWORD</label>
+                <div class="input-group mb-1">
                     <span class="input-group-text bg-black border-0 text-secondary">
                         <i class="fa fa-lock"></i>
                     </span>
-                    <input type="password" name="confirmPassword"
+                    <input type="password" id="confirmPassword" name="confirmPassword"
                             class="form-control bg-black border-0 text-white"
                             placeholder="••••••••">
                 </div>
-                
+                <span class="text-danger small d-block mb-3" id="confirmPasswordError"></span>
+
                 <% if(error) { %>
                     <p class="text-danger"><%= error %></p>
                 <% } %>
@@ -76,7 +79,6 @@
             <strong>GadgetHub</strong><br>
             © 2024 GADGETHUB OBSIDIAN
         </div>
-
         <div class="d-flex gap-3">
             <span>PRIVACY</span>
             <span>TERMS</span>
@@ -84,5 +86,6 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/userRegister.js"></script>
 </body>
 </html>

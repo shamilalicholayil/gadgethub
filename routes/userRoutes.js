@@ -12,6 +12,8 @@ const {
     deleteAddress,
     setDefaultAddress,
 
+    getWallet,
+
     getOrders,
     getOrderDetails,
     cancelOrder,
@@ -49,6 +51,8 @@ router.post("/profile/address", auth, addAddress);
 router.patch("/profile/address/:id", auth, editAddress);
 router.delete("/profile/address/:id", auth, deleteAddress);
 router.patch("/profile/address/:id/default", auth, setDefaultAddress);
+
+router.get("/wallet", auth, getWallet);
 
 router.get("/orders", auth, getOrders);
 router.get("/orders/:id", auth, getOrderDetails);

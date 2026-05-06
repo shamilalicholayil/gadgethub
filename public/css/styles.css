@@ -1,6 +1,7 @@
 body {
   background: radial-gradient(circle at 20% 20%, #0a1a2f, #020617);
-  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
 }
 
 .vh-75 {
@@ -8,7 +9,17 @@ body {
 }
 
 .w-custom {
-    width: 170px;
+  width: 220px;
+  height: 100vh;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.admin-content {
+  height: 100vh;
+  overflow-y: scroll;
+  flex-grow: 1;
+  padding: 1.5rem;
 }
 
 .custom-color {

@@ -69,9 +69,9 @@
                 <div class="glass-card mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6>Select Delivery Address</h6>
-                        <button class="btn btn-outline-info btn-sm" id="addAddressBtn">
+                        <a class="btn btn-outline-info btn-sm" id="addAddressBtn" href="/profile">
                             + Add New
-                        </button>
+                        </a>
                     </div>
 
                     <% if(addresses.length === 0) { %>
@@ -103,15 +103,22 @@
                 <!-- Payment Method -->
                 <div class="glass-card">
                     <h6 class="mb-3">Payment Method</h6>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="payment-option text-center" onclick="selectPayment('COD')" id="pay-COD">
+                    <div class="row g-3 align-items-stretch">
+                        <div class="col-md-4 d-flex">
+                            <div class="payment-option text-center w-100" onclick="selectPayment('wallet')" id="pay-wallet">
+                                <i class="fa-solid fa-wallet"></i>
+                                <div>Wallet</div>
+                                <small class="text-info">Balance: ₹<%= walletBalance %></small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="payment-option text-center w-100" onclick="selectPayment('COD')" id="pay-COD">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                                 <div>Cash on Delivery</div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="payment-option text-center" onclick="selectPayment('online')" id="pay-online">
+                        <div class="col-md-4 d-flex">
+                            <div class="payment-option text-center w-100" onclick="selectPayment('online')" id="pay-online">
                                 <i class="fa-solid fa-credit-card"></i>
                                 <div>Online Payment</div>
                             </div>
@@ -218,6 +225,7 @@
         const USER_PHONE     = "<%= user.phone || '' %>";
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/checkout.js"></script>
     </body>
     </html>

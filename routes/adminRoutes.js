@@ -8,6 +8,7 @@ const {
     postLogin,
     adminLogout,
     getDashboard,
+    downloadReport,
 
     getUsers,
     blockUser,
@@ -40,6 +41,7 @@ router.get("/login", getLogin);
 router.post("/login", postLogin);
 router.get("/logout", adminLogout);
 router.get("/dashboard", adminAuth, getDashboard);
+router.get("/report/download", adminAuth, downloadReport);
 
 router.get("/users", adminAuth, getUsers);
 router.put("/users/:id/block", adminAuth, blockUser);

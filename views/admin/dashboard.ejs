@@ -4,68 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="d-flex">
+    <div class="d-flex" style="height: 100vh; overflow: hidden;">
         <%- include("../partials/adminSidebar") %>
 
-        <div class="flex-grow-1 p-4">
-            <div class="d-flex justify-content-between p-4">
+        <div class="admin-content">
+            <div class="d-flex justify-content-between mb-4">
                 <h4 class="text-info fw-bold">Dashboard</h4>
                 <span class="text-secondary">Welcome, Admin</span>
             </div>
-            <div class="container">
-                <!-- Stat Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3">
-                        <div class="card glass p-4 text-center">
-                            <i class="fa fa-users fa-2x text-info mb-3"></i>
-                            <h4 class="text-secondary"><%= totalUsers %></h4>
-                            <p class="fw-bold text-info mb-0">Total Users</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card glass p-4 text-center">
-                            <i class="fa fa-box fa-2x text-info mb-3"></i>
-                            <h4 class="text-secondary"><%= totalProducts %></h4>
-                            <p class="fw-bold text-info mb-0">Total Products</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card glass p-4 text-center">
-                            <i class="fa fa-shopping-cart fa-2x text-info mb-3"></i>
-                            <h4 class="text-secondary"><%= totalOrders %></h4>
-                            <p class="fw-bold text-info mb-0">Total Orders</p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card glass p-4 text-center">
-                            <i class="fa fa-indian-rupee-sign fa-2x text-info mb-3"></i>
-                            <h4 class="text-secondary">₹<%= totalRevenue %></h4>
-                            <p class="fw-bold text-info mb-0">Total Revenue</p>
-                        </div>
+
+            <!-- Stat Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card glass p-4 text-center">
+                        <i class="fa fa-users fa-2x text-info mb-3"></i>
+                        <h4 class="text-secondary"><%= totalUsers %></h4>
+                        <p class="fw-bold text-info mb-0">Total Users</p>
                     </div>
                 </div>
-
-                <!-- Charts -->
-                <div class="row g-4">
-                    <div class="col-md-8">
-                        <div class="card glass p-4">
-                            <h6 class="text-info mb-3">Monthly Revenue</h6>
-                            <canvas id="revenueChart"></canvas>
-                        </div>
+                <div class="col-md-3">
+                    <div class="card glass p-4 text-center">
+                        <i class="fa fa-box fa-2x text-info mb-3"></i>
+                        <h4 class="text-secondary"><%= totalProducts %></h4>
+                        <p class="fw-bold text-info mb-0">Total Products</p>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card glass p-4">
-                            <h6 class="text-info mb-3">Orders by Status</h6>
-                            <canvas id="statusChart"></canvas>
+                </div>
+                <div class="col-md-3">
+                    <div class="card glass p-4 text-center">
+                        <i class="fa fa-shopping-cart fa-2x text-info mb-3"></i>
+                        <h4 class="text-secondary"><%= totalOrders %></h4>
+                        <p class="fw-bold text-info mb-0">Total Orders</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card glass p-4 text-center">
+                        <i class="fa fa-indian-rupee-sign fa-2x text-info mb-3"></i>
+                        <h4 class="text-secondary">₹<%= totalRevenue %></h4>
+                        <p class="fw-bold text-info mb-0">Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-8">
+                    <div class="card glass p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-info mb-0">Revenue</h6>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-info btn-sm active" onclick="switchChart('daily')">Daily</button>
+                                <button class="btn btn-outline-info btn-sm" onclick="switchChart('monthly')">Monthly</button>
+                                <button class="btn btn-outline-info btn-sm" onclick="switchChart('sixmonth')">6 Months</button>
+                                <button class="btn btn-outline-info btn-sm" onclick="switchChart('yearly')">Yearly</button>
+                            </div>
+                        </div>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card glass p-4">
+                        <h6 class="text-info mb-3">Orders by Status</h6>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card glass p-4">
+                        <h6 class="text-info mb-3">Top 5 Products</h6>
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card glass p-4">
+                        <h6 class="text-info mb-3">Revenue by Category</h6>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Download -->
+            <div class="row g-4 mb-4">
+                <div class="col-12">
+                    <div class="card glass p-4">
+                        <h6 class="text-info mb-3">Download Sales Report</h6>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <a href="/admin/report/download?range=day" class="btn btn-outline-info btn-sm">Today</a>
+                            <a href="/admin/report/download?range=week" class="btn btn-outline-info btn-sm">This Week</a>
+                            <a href="/admin/report/download?range=month" class="btn btn-outline-info btn-sm">This Month</a>
+                            <a href="/admin/report/download?range=year" class="btn btn-outline-info btn-sm">This Year</a>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap align-items-end">
+                            <div>
+                                <label class="text-secondary small">Start Date</label>
+                                <input type="date" id="startDate" class="form-control custom-input">
+                            </div>
+                            <div>
+                                <label class="text-secondary small">End Date</label>
+                                <input type="date" id="endDate" class="form-control custom-input">
+                            </div>
+                            <button class="btn btn-outline-info" onclick="downloadCustom()">Download Custom</button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -73,7 +123,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const monthlySales = <%- JSON.stringify(monthlySales) %>;
+        const dailySales = <%- JSON.stringify(dailySales) %>;
+        const sixMonthSales = <%- JSON.stringify(sixMonthSales) %>;
+        const yearlySales = <%- JSON.stringify(yearlySales) %>;
         const ordersByStatus = <%- JSON.stringify(ordersByStatus) %>;
+        const topProducts = <%- JSON.stringify(topProducts) %>;
+        const categorySales = <%- JSON.stringify(categorySales) %>;
     </script>
     <script src="/js/analytics.js"></script>
 </body>
