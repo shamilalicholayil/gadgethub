@@ -28,12 +28,13 @@ const razorpay = new Razorpay({
 const getHome = async (req, res) => {
     try {
         const products = await Product.find({ isActive: true }).limit(4);
+        const offerProducts = await Product.find({ isActive: true, hasOffer: true }).limit(5);
         const category = await Category.find();
         const smartphoneCategory = category.find(c => c.name === "SMARTPHONES");
         const laptopCategory = category.find(c => c.name === "LAPTOPS");
         const audioCategory = category.find(c => c.name === "AUDIO");
         const accessoriesCategory = category.find(c => c.name === "ACCESSORIES");
-        res.render("home", { products, smartphoneCategory, laptopCategory, audioCategory, accessoriesCategory, currentPage: "home" });
+        res.render("home", { products, offerProducts, smartphoneCategory, laptopCategory, audioCategory, accessoriesCategory, currentPage: "home" });
     } catch (error) {
         res.render("home", { currentPage: "home", error: "Something went wrong. Try again." });
     }
