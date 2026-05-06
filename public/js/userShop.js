@@ -11,7 +11,7 @@ function renderProducts(products) {
         <div class="col-6 col-md-4 col-lg-4">
             <div class="card glass p-4 h-100">
                 <img src="${product.images[0].url}" class="mb-3"
-                    width="auto" height="200" style="object-fit:cover;border-radius:10px">
+                    width="auto" height="200" style="object-fit:contain;border-radius:10px">
                 <h5 class="fw-bold text-info mb-3">${product.name}</h5>
                 <p class="text-secondary">₹${product.finalPrice}</p>
                 <div class="d-flex gap-2 mt-auto">
