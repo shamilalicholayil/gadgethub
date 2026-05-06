@@ -780,7 +780,7 @@ const createRazorpayOrder = async (req, res) => {
 
     try {
         const order = await razorpay.orders.create({
-            amount: Math.round(amount * 100),
+            amount: Math.round(amount),
             currency: "INR",
             receipt: `receipt_${Date.now()}`
         });
