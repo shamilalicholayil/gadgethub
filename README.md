@@ -48,6 +48,7 @@ A full-stack single-vendor electronics e-commerce web application.
    npm install
 ```
 3. Create a `.env` file in the root with the following:
+```bash
    PORT=3000
    MONGO_URI=your_mongodb_uri
    SESSION_SECRET=your_secret
@@ -56,6 +57,7 @@ A full-stack single-vendor electronics e-commerce web application.
    CLOUDINARY_API_SECRET=your_api_secret
    EMAIL=your_gmail
    EMAIL_PASSWORD=your_app_password
+```
 5. Run the app
 ```bash
    npm start
