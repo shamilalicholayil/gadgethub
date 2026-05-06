@@ -7,6 +7,9 @@ const crypto = require("crypto");
 const transporter = require("../config/mailer");
 
 const getRegister = (req, res) => {
+    if(req.session.user) {
+        return res.redirect("/home");
+    }
     res.render("register", { error: null });
 }
 

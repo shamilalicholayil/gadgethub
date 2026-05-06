@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const noCache = require("../middleware/noCache");
 
 const {
     getLogin,
@@ -14,9 +15,9 @@ const {
     resetPassword
 } = require("../controllers/authController");
 
-router.get("/login", getLogin);
+router.get("/login", noCache, getLogin);
 router.post("/login", postLogin);
-router.get("/register", getRegister, );
+router.get("/register", noCache, getRegister, );
 router.post("/register", postRegister);
 router.get("/logout", userLogout);
 
