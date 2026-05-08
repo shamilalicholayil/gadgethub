@@ -1,16 +1,16 @@
 const emailInput    = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+const passwordInput = document.getElementById("pwInput");
 
 function validateEmail() {
     const value = emailInput.value.trim();
-    if (!value) return setError("emailError", "Email is required.");
+    if (!value) return setError("emailErr", "Email is required.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return setError("emailError", "Enter a valid email address.");
     return clearError("emailError");
 }
 
 function validatePassword() {
     const value = passwordInput.value;
-    if (!value) return setError("passwordError", "Password is required.");
+    if (!value) return setError("pwErr", "Password is required.");
     return clearError("passwordError");
 }
 
