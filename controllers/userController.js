@@ -786,7 +786,7 @@ const createRazorpayOrder = async (req, res) => {
         });
         res.json({ success: true, order });
     } catch (error) {
-        res.json({ success: false, message: "Could not initiate payment." });
+        res.json({ success: false, message: error.error?.description || error.message || "Could not initiate payment." });
     }
 };
 
