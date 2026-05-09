@@ -1,24 +1,33 @@
-// Password show/hide toggle
-        const eyeBtn  = document.getElementById('eyeBtn');
-        const eyeIcon = document.getElementById('eyeIcon');
-        const pwInput = document.getElementById('password');
+const emailInput    = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 
-        eyeBtn.addEventListener('click', function () {
-            const showing = pwInput.type === 'text';
-            pwInput.type  = showing ? 'password' : 'text';
-            eyeIcon.className = showing ? 'fa fa-eye' : 'fa fa-eye-slash';
-            eyeBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
-        });
+function validateEmail() {
+    const value = emailInput.value.trim();
+    if (!value) return setError("emailError", "Email is required.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return setError("emailError", "Enter a valid email address.");
+    return clearError("emailError");
+}
 
-        // Mirror JS validation errors → red border on input-group wrapper
-        const emailError    = document.getElementById('emailError');
-        const passwordError = document.getElementById('passwordError');
-        const emGroup       = document.getElementById('emailGroup');
-        const pwGroup       = document.getElementById('passwordGroup');
+function validatePassword() {
+    const value = passwordInput.value;
+    if (!value) return setError("passwordError", "Password is required.");
+    return clearError("passwordError");
+}
 
-        const errorObserver = new MutationObserver(() => {
-            emGroup.classList.toggle('is-invalid', !!emailError.textContent.trim());
-            pwGroup.classList.toggle('is-invalid', !!passwordError.textContent.trim());
-        });
-        errorObserver.observe(emailError,    { childList: true, characterData: true, subtree: true });
-        errorObserver.observe(passwordError, { childList: true, characterData: true, subtree: true });
+function setError(id, message) {
+    document.getElementById(id).textContent = message;
+    return false;
+}
+
+function clearError(id) {
+    document.getElementById(id).textContent = "";
+    return true;
+}
+
+emailInput.addEventListener("input", validateEmail);
+passwordInput.addEventListener("input", validatePassword);
+
+document.getElementById("loginForm").addEventListener("submit", function (e) {
+    const isValid = [validateEmail(), validatePassword()].every(Boolean);
+    if (!isValid) e.preventDefault();
+});
