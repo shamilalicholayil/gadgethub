@@ -1,164 +1,868 @@
- * { box-sizing: border-box; margin: 0; padding: 0; }
-  .page {
-    min-height: 520px;
-    background: #020617;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Segoe UI', sans-serif;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .header {
-    padding: 20px 28px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .logo-icon {
-    width: 28px; height: 28px;
-    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .logo-text { color: #06b6d4; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
-  .main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .card {
-    width: 100%;
-    max-width: 360px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(6,182,212,0.2);
-    border-radius: 20px;
-    padding: 32px 28px;
-    position: relative;
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: 50%; transform: translateX(-50%);
-    width: 60%; height: 1px;
-    background: linear-gradient(90deg, transparent, #06b6d4, transparent);
-  }
-  .tab-row {
-    display: flex;
-    gap: 24px;
-    margin-bottom: 28px;
-  }
-  .tab {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    padding-bottom: 6px;
-    cursor: pointer;
-    border: none;
-    background: none;
-  }
-  .tab.active {
-    color: #06b6d4;
-    border-bottom: 2px solid #06b6d4;
-  }
-  .tab.inactive { color: #475569; }
-  .field-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #475569;
-    margin-bottom: 6px;
-    display: block;
-  }
-  .input-wrap {
-    display: flex;
-    align-items: center;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    margin-bottom: 4px;
-    transition: border-color 0.2s;
-  }
-  .input-wrap:focus-within {
-    border-color: #06b6d4;
-    box-shadow: 0 0 0 3px rgba(6,182,212,0.12);
-  }
-  .input-icon {
-    padding: 0 12px;
-    color: #334155;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-  }
-  .input-wrap input {
-    background: none;
-    border: none;
-    outline: none;
-    color: #e2e8f0;
-    font-size: 14px;
-    padding: 11px 4px 11px 0;
-    flex: 1;
-    font-family: inherit;
-  }
-  .input-wrap input::placeholder { color: #1e3a5f; }
-  .eye-btn {
-    background: none; border: none; cursor: pointer;
-    color: #334155; padding: 0 12px; font-size: 14px;
-    display: flex; align-items: center;
-  }
-  .error-text { font-size: 11px; color: #ef4444; min-height: 18px; margin-bottom: 10px; }
-  .forgot {
-    font-size: 11px; color: #475569;
-    text-align: right; display: block;
-    margin-bottom: 20px; cursor: pointer;
-    text-decoration: none;
-  }
-  .forgot:hover { color: #06b6d4; }
-  .btn-login {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-login:active { transform: translateY(0); }
-  .divider {
-    display: flex; align-items: center; gap: 10px;
-    margin: 18px 0;
-  }
-  .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
-  .divider-text { font-size: 11px; color: #334155; letter-spacing: 1px; }
-  .social-row { display: flex; gap: 10px; }
-  .social-btn {
-    flex: 1; padding: 9px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 8px;
-    color: #94a3b8; font-size: 13px;
-    cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-    gap: 6px; font-family: inherit;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 0.5px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .social-btn:hover { border-color: rgba(6,182,212,0.3); color: #cbd5e1; }
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 28px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
-  .footer-brand { font-size: 11px; color: #1e3a5f; font-weight: 600; letter-spacing: 1px; }
-  .footer-links { display: flex; gap: 16px; }
-  .footer-links span { font-size: 10px; color: #1e3a5f; letter-spacing: 1px; cursor: pointer; }
-  .footer-links span:hover { color: #475569; }
+        /* ── Variables ───────────────────────────────── */
+        :root {
+            --cyan:       #06b6d4;
+            --cyan-dim:   rgba(6,182,212,0.18);
+            --cyan-glow:  rgba(6,182,212,0.08);
+            --bg:         #020617;
+            --surface:    rgba(255,255,255,0.04);
+            --border:     rgba(255,255,255,0.07);
+            --border-focus: rgba(6,182,212,0.55);
+            --text:       #e2e8f0;
+            --muted:      #475569;
+            --input-bg:   rgba(0,0,0,0.45);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: radial-gradient(ellipse 80% 60% at 20% 10%, #0a1a2f 0%, var(--bg) 70%);
+            min-height: 100vh;
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ──────────────────────────────────── */
+        .gh-header {
+            padding: clamp(14px, 3vw, 22px) clamp(16px, 4vw, 32px);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark {
+            width: 30px; height: 30px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border-radius: 7px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            padding: 6px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark span { background: #fff; border-radius: 1.5px; }
+        .gh-logo-mark span:nth-child(2),
+        .gh-logo-mark span:nth-child(3) { opacity: 0.55; }
+        .gh-logo-mark span:nth-child(4) { opacity: 0.25; }
+        .gh-logo-text {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--cyan);
+        }
+
+        /* ── Main ────────────────────────────────────── */
+        .gh-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(12px, 3vw, 32px) clamp(12px, 4vw, 24px);
+        }
+
+        /* ── Card ────────────────────────────────────── */
+        .gh-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px);
+            position: relative;
+        }
+        .gh-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 50%;
+            transform: translateX(-50%);
+            width: 55%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        }
+
+        /* ── Tabs ────────────────────────────────────── */
+        .gh-tabs {
+            display: flex;
+            gap: 28px;
+            margin-bottom: clamp(20px, 4vw, 28px);
+        }
+        .gh-tab {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            padding-bottom: 7px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .gh-tab.active  { color: var(--cyan); border-bottom-color: var(--cyan); }
+        .gh-tab.inactive { color: var(--muted); }
+        .gh-tab.inactive:hover { color: #64748b; }
+
+        /* ── Label ───────────────────────────────────── */
+        .gh-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        /* ── Input group ─────────────────────────────── */
+        .gh-input-group {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+        .gh-input-group:focus-within {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--cyan-glow);
+        }
+        .gh-input-group.is-invalid {
+            border-color: rgba(239,68,68,0.5);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+        }
+        .gh-input-icon {
+            padding: 0 13px;
+            color: #334155;
+            font-size: 13px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+        .gh-input-group input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 14px;
+            padding: 12px 4px;
+            font-family: inherit;
+            min-width: 0;
+        }
+        .gh-input-group input::placeholder { color: #1e3a5f; }
+        .gh-eye-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #334155;
+            padding: 0 13px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        .gh-eye-btn:hover { color: var(--muted); }
+
+        /* ── Error ───────────────────────────────────── */
+        .gh-error {
+            font-size: 11px;
+            color: #ef4444;
+            min-height: 18px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ── Server error (EJS) ──────────────────────── */
+        .gh-server-error {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.25);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #f87171;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Forgot ──────────────────────────────────── */
+        .gh-forgot {
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .gh-forgot:hover { color: var(--cyan); }
+
+        /* ── Submit button ───────────────────────────── */
+        .gh-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border: none;
+            border-radius: 11px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .gh-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+        .gh-btn:active  { transform: translateY(0); opacity: 1; }
+
+        /* ── Divider ─────────────────────────────────── */
+        .gh-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .gh-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .gh-divider-text { font-size: 10px; color: #1e3a5f; letter-spacing: 1.5px; flex-shrink: 0; }
+
+        /* ── Social buttons ──────────────────────────── */
+        .gh-social-row { display: flex; gap: 10px; }
+        .gh-social-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: border-color 0.2s, color 0.2s;
+            min-width: 0;
+        }
+        .gh-social-btn:hover {
+            border-color: var(--cyan-dim);
+            color: #94a3b8;
+        }
+        .gh-social-btn svg { flex-shrink: 0; }
+
+        /* ── Footer ──────────────────────────────────── */
+        .gh-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: clamp(12px, 2.5vw, 18px) clamp(16px, 4vw, 32px);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+        .gh-footer-brand {
+            font-size: 10px;
+            color: #1e3a5f;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .gh-footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+        .gh-footer-links a {
+            font-size: 10px;
+            color: #1e3a5f;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .gh-footer-links a:hover { color: var(--muted); }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 380px) {
+            .gh-social-btn span { display: none; }
+            .gh-tabs { gap: 18px; }
+        }
+
+        /* ── Variables ───────────────────────────────── */
+        :root {
+            --cyan:       #06b6d4;
+            --cyan-dim:   rgba(6,182,212,0.18);
+            --cyan-glow:  rgba(6,182,212,0.08);
+            --bg:         #020617;
+            --surface:    rgba(255,255,255,0.04);
+            --border:     rgba(255,255,255,0.07);
+            --border-focus: rgba(6,182,212,0.55);
+            --text:       #e2e8f0;
+            --muted:      #475569;
+            --input-bg:   rgba(0,0,0,0.45);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: radial-gradient(ellipse 80% 60% at 20% 10%, #0a1a2f 0%, var(--bg) 70%);
+            min-height: 100vh;
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ──────────────────────────────────── */
+        .gh-header {
+            padding: clamp(14px, 3vw, 22px) clamp(16px, 4vw, 32px);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark {
+            width: 30px; height: 30px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border-radius: 7px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            padding: 6px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark span { background: #fff; border-radius: 1.5px; }
+        .gh-logo-mark span:nth-child(2),
+        .gh-logo-mark span:nth-child(3) { opacity: 0.55; }
+        .gh-logo-mark span:nth-child(4) { opacity: 0.25; }
+        .gh-logo-text {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--cyan);
+        }
+
+        /* ── Main ────────────────────────────────────── */
+        .gh-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(12px, 3vw, 32px) clamp(12px, 4vw, 24px);
+        }
+
+        /* ── Card ────────────────────────────────────── */
+        .gh-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px);
+            position: relative;
+        }
+        .gh-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 50%;
+            transform: translateX(-50%);
+            width: 55%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        }
+
+        /* ── Tabs ────────────────────────────────────── */
+        .gh-tabs {
+            display: flex;
+            gap: 28px;
+            margin-bottom: clamp(20px, 4vw, 28px);
+        }
+        .gh-tab {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            padding-bottom: 7px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .gh-tab.active  { color: var(--cyan); border-bottom-color: var(--cyan); }
+        .gh-tab.inactive { color: var(--muted); }
+        .gh-tab.inactive:hover { color: #64748b; }
+
+        /* ── Label ───────────────────────────────────── */
+        .gh-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        /* ── Input group ─────────────────────────────── */
+        .gh-input-group {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+        .gh-input-group:focus-within {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--cyan-glow);
+        }
+        .gh-input-group.is-invalid {
+            border-color: rgba(239,68,68,0.5);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+        }
+        .gh-input-icon {
+            padding: 0 13px;
+            color: #334155;
+            font-size: 13px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+        .gh-input-group input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 14px;
+            padding: 12px 4px;
+            font-family: inherit;
+            min-width: 0;
+        }
+        .gh-input-group input::placeholder { color: #1e3a5f; }
+        .gh-eye-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #334155;
+            padding: 0 13px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        .gh-eye-btn:hover { color: var(--muted); }
+
+        /* ── Error ───────────────────────────────────── */
+        .gh-error {
+            font-size: 11px;
+            color: #ef4444;
+            min-height: 18px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ── Server error (EJS) ──────────────────────── */
+        .gh-server-error {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.25);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #f87171;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Forgot ──────────────────────────────────── */
+        .gh-forgot {
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .gh-forgot:hover { color: var(--cyan); }
+
+        /* ── Submit button ───────────────────────────── */
+        .gh-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border: none;
+            border-radius: 11px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .gh-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+        .gh-btn:active  { transform: translateY(0); opacity: 1; }
+
+        /* ── Divider ─────────────────────────────────── */
+        .gh-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .gh-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .gh-divider-text { font-size: 10px; color: #1e3a5f; letter-spacing: 1.5px; flex-shrink: 0; }
+
+        /* ── Social buttons ──────────────────────────── */
+        .gh-social-row { display: flex; gap: 10px; }
+        .gh-social-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: border-color 0.2s, color 0.2s;
+            min-width: 0;
+        }
+        .gh-social-btn:hover {
+            border-color: var(--cyan-dim);
+            color: #94a3b8;
+        }
+        .gh-social-btn svg { flex-shrink: 0; }
+
+        /* ── Footer ──────────────────────────────────── */
+        .gh-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: clamp(12px, 2.5vw, 18px) clamp(16px, 4vw, 32px);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+        .gh-footer-brand {
+            font-size: 10px;
+            color: #1e3a5f;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .gh-footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+        .gh-footer-links a {
+            font-size: 10px;
+            color: #1e3a5f;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .gh-footer-links a:hover { color: var(--muted); }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 380px) {
+            .gh-social-btn span { display: none; }
+            .gh-tabs { gap: 18px; }
+        }
+        /* ── Variables ───────────────────────────────── */
+        :root {
+            --cyan:       #06b6d4;
+            --cyan-dim:   rgba(6,182,212,0.18);
+            --cyan-glow:  rgba(6,182,212,0.08);
+            --bg:         #020617;
+            --surface:    rgba(255,255,255,0.04);
+            --border:     rgba(255,255,255,0.07);
+            --border-focus: rgba(6,182,212,0.55);
+            --text:       #e2e8f0;
+            --muted:      #475569;
+            --input-bg:   rgba(0,0,0,0.45);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: radial-gradient(ellipse 80% 60% at 20% 10%, #0a1a2f 0%, var(--bg) 70%);
+            min-height: 100vh;
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ──────────────────────────────────── */
+        .gh-header {
+            padding: clamp(14px, 3vw, 22px) clamp(16px, 4vw, 32px);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark {
+            width: 30px; height: 30px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border-radius: 7px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            padding: 6px;
+            flex-shrink: 0;
+        }
+        .gh-logo-mark span { background: #fff; border-radius: 1.5px; }
+        .gh-logo-mark span:nth-child(2),
+        .gh-logo-mark span:nth-child(3) { opacity: 0.55; }
+        .gh-logo-mark span:nth-child(4) { opacity: 0.25; }
+        .gh-logo-text {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--cyan);
+        }
+
+        /* ── Main ────────────────────────────────────── */
+        .gh-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(12px, 3vw, 32px) clamp(12px, 4vw, 24px);
+        }
+
+        /* ── Card ────────────────────────────────────── */
+        .gh-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px);
+            position: relative;
+        }
+        .gh-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 50%;
+            transform: translateX(-50%);
+            width: 55%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        }
+
+        /* ── Tabs ────────────────────────────────────── */
+        .gh-tabs {
+            display: flex;
+            gap: 28px;
+            margin-bottom: clamp(20px, 4vw, 28px);
+        }
+        .gh-tab {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            padding-bottom: 7px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .gh-tab.active  { color: var(--cyan); border-bottom-color: var(--cyan); }
+        .gh-tab.inactive { color: var(--muted); }
+        .gh-tab.inactive:hover { color: #64748b; }
+
+        /* ── Label ───────────────────────────────────── */
+        .gh-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+
+        /* ── Input group ─────────────────────────────── */
+        .gh-input-group {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+        .gh-input-group:focus-within {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--cyan-glow);
+        }
+        .gh-input-group.is-invalid {
+            border-color: rgba(239,68,68,0.5);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+        }
+        .gh-input-icon {
+            padding: 0 13px;
+            color: #334155;
+            font-size: 13px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+        .gh-input-group input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: 14px;
+            padding: 12px 4px;
+            font-family: inherit;
+            min-width: 0;
+        }
+        .gh-input-group input::placeholder { color: #1e3a5f; }
+        .gh-eye-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #334155;
+            padding: 0 13px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        .gh-eye-btn:hover { color: var(--muted); }
+
+        /* ── Error ───────────────────────────────────── */
+        .gh-error {
+            font-size: 11px;
+            color: #ef4444;
+            min-height: 18px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ── Server error (EJS) ──────────────────────── */
+        .gh-server-error {
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.25);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #f87171;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── Forgot ──────────────────────────────────── */
+        .gh-forgot {
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .gh-forgot:hover { color: var(--cyan); }
+
+        /* ── Submit button ───────────────────────────── */
+        .gh-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--cyan), #0ea5e9);
+            border: none;
+            border-radius: 11px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .gh-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+        .gh-btn:active  { transform: translateY(0); opacity: 1; }
+
+        /* ── Divider ─────────────────────────────────── */
+        .gh-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .gh-divider-line { flex: 1; height: 1px; background: var(--border); }
+        .gh-divider-text { font-size: 10px; color: #1e3a5f; letter-spacing: 1.5px; flex-shrink: 0; }
+
+        /* ── Social buttons ──────────────────────────── */
+        .gh-social-row { display: flex; gap: 10px; }
+        .gh-social-btn {
+            flex: 1;
+            padding: 10px 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: border-color 0.2s, color 0.2s;
+            min-width: 0;
+        }
+        .gh-social-btn:hover {
+            border-color: var(--cyan-dim);
+            color: #94a3b8;
+        }
+        .gh-social-btn svg { flex-shrink: 0; }
+
+        /* ── Footer ──────────────────────────────────── */
+        .gh-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: clamp(12px, 2.5vw, 18px) clamp(16px, 4vw, 32px);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+        .gh-footer-brand {
+            font-size: 10px;
+            color: #1e3a5f;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .gh-footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+        .gh-footer-links a {
+            font-size: 10px;
+            color: #1e3a5f;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .gh-footer-links a:hover { color: var(--muted); }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 380px) {
+            .gh-social-btn span { display: none; }
+            .gh-tabs { gap: 18px; }
+        }
