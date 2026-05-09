@@ -1,34 +1,66 @@
+        /* ── Mobile sidebar toggle ──────────────────────── */
+        const filterSidebar    = document.getElementById('filterSidebar');
+        const sidebarBackdrop  = document.getElementById('sidebarBackdrop');
+        const filterToggleBtn  = document.getElementById('filterToggleBtn');
+        const sidebarCloseBtn  = document.getElementById('sidebarCloseBtn');
 
+        function openSidebar() {
+            filterSidebar.classList.add('open');
+            sidebarBackdrop.classList.add('open');
+            filterToggleBtn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar() {
+            filterSidebar.classList.remove('open');
+            sidebarBackdrop.classList.remove('open');
+            filterToggleBtn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        filterToggleBtn.addEventListener('click', openSidebar);
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+
+        // Close sidebar on filter change (mobile UX)
+        document.querySelectorAll('.filter-category, .filter-brand').forEach(input => {
+            input.addEventListener('change', () => {
+                if (window.innerWidth < 992) closeSidebar();
+            });
+        });
 
 // Render Products
-function renderProducts(products) {
-    const container = document.getElementById("shopTableBody");
-    if(products.length === 0) {
-        container.innerHTML = `<div class="text-center py-5 text-secondary">No products found.</div>`;
-        return;
-    }
-    container.innerHTML = products.map(product => `
-        <div class="col-6 col-md-4 col-lg-4">
-            <div class="card glass p-4 h-100">
-                <img src="${product.images[0].url}" class="mb-3"
-                    width="auto" height="200" style="object-fit:contain;border-radius:10px">
-                <h5 class="fw-bold text-info mb-3">${product.name}</h5>
-                <p class="text-secondary">₹${product.finalPrice}</p>
-                <div class="d-flex gap-2 mt-auto">
-                    <a href="/product/${product._id}" class="btn btn-sm btn-info w-75">Buy Now</a>
-                    <button class="btn btn-sm btn-outline-info w-100 addToCartBtn"
-                        data-id="${product._id}">
-                        <i class="fa fa-cart-shopping"></i> Add to Cart
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger addToWishlistBtn"
-                        data-id="${product._id}">
-                        <i class="fa fa-heart"></i>
-                    </button>
+        function renderProducts(products) {
+            const container = document.getElementById("shopTableBody");
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" role="listitem">
+                        <i class="fa fa-box-open" aria-hidden="true"></i>
+                        <p>No products found.<br>Try adjusting your filters.</p>
+                    </div>`;
+                return;
+            }
+            container.innerHTML = products.map(product => `
+                <div class="product-card" role="listitem">
+                    <div class="product-img-wrap">
+                        <img src="${product.images[0].url}"
+                             alt="${product.name}"
+                             loading="lazy">
+                    </div>
+                    <p class="product-name">${product.name}</p>
+                    <p class="product-price">₹${product.finalPrice.toLocaleString('en-IN')}</p>
+                    <div class="product-actions">
+                        <a href="/product/${product._id}" class="btn-buy">Buy Now</a>
+                        <button class="btn-cart addToCartBtn" data-id="${product._id}" aria-label="Add ${product.name} to cart">
+                            <i class="fa fa-cart-shopping" aria-hidden="true"></i>
+                            <span>Cart</span>
+                        </button>
+                        <button class="btn-wish addToWishlistBtn" data-id="${product._id}" aria-label="Add ${product.name} to wishlist">
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `).join("");
-}
+            `).join("");
+        }
 
 // Pagination
 function renderPagination(currentPageNumber, totalPages) {

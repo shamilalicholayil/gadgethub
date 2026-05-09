@@ -3,124 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Shop — GadgetHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="/css/userShop.css">
+    
 </head>
 <body>
 
     <%- include("./partials/userNavbar") %>
-    <div class="d-flex">
 
-        <!-- FILTER SIDEBAR -->
-        <div id="filterSidebar" class="p-3 border-end border-secondary w-25"
-            style="width:260px;min-height:100vh;flex-shrink:0">
+    <!-- Backdrop for mobile sidebar -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
-            <h6 class="text-info fw-bold mb-3">🔍 Filters</h6>
+    <div class="shop-shell">
+
+        <!-- ── Filter Sidebar ── -->
+        <aside class="filter-sidebar" id="filterSidebar" aria-label="Product filters">
+
+            <div class="filter-title">
+                <span><i class="fa fa-sliders me-2" aria-hidden="true"></i>FILTERS</span>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close filters">
+                    <i class="fa fa-xmark"></i>
+                </button>
+            </div>
 
             <!-- Category -->
-            <div class="mb-4">
-                <p class="text-secondary small fw-bold mb-2">CATEGORY</p>
-                <% categories.forEach(cat => { %>
-                    <div class="form-check">
-                        <input class="form-check-input filter-category" type="radio"
-                            name="categoryFilter"
-                            value="<%= cat._id %>"
-                            id="cat-<%= cat._id %>">
-                        <label class="form-check-label text-secondary small"
-                            for="cat-<%= cat._id %>">
-                            <%= cat.name %>
-                        </label>
-                    </div>
-                <% }) %>
-                <div class="form-check">
-                    <input class="form-check-input filter-category" type="radio"
-                        name="categoryFilter" value="" id="cat-all" checked>
-                    <label class="form-check-label text-secondary small" for="cat-all">All</label>
+            <p class="filter-section-label">CATEGORY</p>
+            <% categories.forEach(cat => { %>
+                <div class="gh-radio">
+                    <input class="filter-category" type="radio"
+                           name="categoryFilter"
+                           value="<%= cat._id %>"
+                           id="cat-<%= cat._id %>">
+                    <label for="cat-<%= cat._id %>"><%= cat.name %></label>
                 </div>
+            <% }) %>
+            <div class="gh-radio">
+                <input class="filter-category" type="radio"
+                       name="categoryFilter" value="" id="cat-all" checked>
+                <label for="cat-all">All</label>
             </div>
+
+            <hr class="filter-divider">
 
             <!-- Brand -->
-            <div class="mb-4">
-                <p class="text-secondary small fw-bold mb-2">BRAND</p>
-                <% brands.forEach(brand => { %>
-                    <div class="form-check">
-                        <input class="form-check-input filter-brand" type="radio"
-                            name="brandFilter"
-                            value="<%= brand._id %>"
-                            id="brand-<%= brand._id %>">
-                        <label class="form-check-label text-secondary small"
-                            for="brand-<%= brand._id %>">
-                            <%= brand.name %>
-                        </label>
-                    </div>
-                <% }) %>
-                <div class="form-check">
-                    <input class="form-check-input filter-brand" type="radio"
-                        name="brandFilter" value="" id="brand-all" checked>
-                    <label class="form-check-label text-secondary small" for="brand-all">All</label>
+            <p class="filter-section-label">BRAND</p>
+            <% brands.forEach(brand => { %>
+                <div class="gh-radio">
+                    <input class="filter-brand" type="radio"
+                           name="brandFilter"
+                           value="<%= brand._id %>"
+                           id="brand-<%= brand._id %>">
+                    <label for="brand-<%= brand._id %>"><%= brand.name %></label>
                 </div>
+            <% }) %>
+            <div class="gh-radio">
+                <input class="filter-brand" type="radio"
+                       name="brandFilter" value="" id="brand-all" checked>
+                <label for="brand-all">All</label>
             </div>
 
-            <!-- Price Range -->
-            <div class="mb-4">
-                <p class="text-secondary small fw-bold mb-2">PRICE RANGE</p>
-                    <input type="number" id="minPrice" placeholder="Min"
-                        class="form-control form-control-sm custom-input border-secondary mb-2">
-                    <input type="number" id="maxPrice" placeholder="Max"
-                        class="form-control form-control-sm custom-input border-secondary">
+            <hr class="filter-divider">
+
+            <!-- Price range -->
+            <p class="filter-section-label">PRICE RANGE</p>
+            <div class="d-flex gap-2 mb-3">
+                <input type="number" id="minPrice" placeholder="Min ₹"
+                       class="gh-input" min="0" aria-label="Minimum price">
+                <input type="number" id="maxPrice" placeholder="Max ₹"
+                       class="gh-input" min="0" aria-label="Maximum price">
             </div>
 
             <!-- Sort -->
-            <div class="mb-4">
-                <p class="text-secondary small fw-bold mb-2">SORT BY</p>
-                <select id="sortSelect" class="form-select form-select-sm custom-input border-secondary">
-                    <option value="newest">Newest</option>
-                    <option value="price_asc">Price: Low → High</option>
-                    <option value="price_desc">Price: High → Low</option>
-                </select>
-            </div>
+            <p class="filter-section-label">SORT BY</p>
+            <select id="sortSelect" class="gh-select mb-4" aria-label="Sort products">
+                <option value="newest">Newest</option>
+                <option value="price_asc">Price: Low → High</option>
+                <option value="price_desc">Price: High → Low</option>
+            </select>
 
-            <!-- Clear -->
-            <button id="clearFilters" class="btn btn-sm btn-outline-secondary w-100">
-                Clear Filters
+            <button id="clearFilters" class="gh-clear-btn">
+                <i class="fa fa-rotate-left me-1" aria-hidden="true"></i> Clear Filters
             </button>
+        </aside>
 
-        </div>
+        <!-- ── Main Content ── -->
+        <main class="shop-content">
 
-        <!-- PRODUCTS -->
-        <div class="flex-grow-1 p-4">
-            <div class="d-flex justify-content-between align-items-center p-4">
-                <h4 class="text-info fw-bold">Products</h4>
-                <input type="text" id="searchInput" placeholder="Search Name"
-                    class="form-control custom-input border-secondary w-50">
+            <!-- Top bar -->
+            <div class="shop-topbar">
+                <h1 class="shop-heading">Products</h1>
+                <div class="topbar-right">
+                    <!-- Mobile filter button -->
+                    <button class="filter-toggle-btn" id="filterToggleBtn" aria-expanded="false" aria-controls="filterSidebar">
+                        <i class="fa fa-sliders" aria-hidden="true"></i>
+                        <span>Filters</span>
+                    </button>
+                    <!-- Search -->
+                    <div class="search-wrap">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        <input type="text" id="searchInput"
+                               class="gh-input"
+                               placeholder="Search products…"
+                               aria-label="Search products">
+                    </div>
+                </div>
             </div>
 
-            <div class="container mt-4">
-                <div class="row g-4" id="shopTableBody"></div>
+            <!-- Product grid -->
+            <div id="shopTableBody" role="list" aria-live="polite" aria-label="Product listing">
+                <!-- Skeleton placeholders while loading -->
+                <% for(let i = 0; i < 8; i++) { %>
+                <div class="skeleton-card" aria-hidden="true">
+                    <div class="skeleton-box sk-img"></div>
+                    <div class="skeleton-box sk-title"></div>
+                    <div class="skeleton-box sk-price"></div>
+                    <div class="skeleton-box sk-btns"></div>
+                </div>
+                <% } %>
             </div>
-        </div>
-
+        </main>
     </div>
 
     <!-- Pagination -->
-    <ul class="pagination justify-content-center mt-3" id="paginationContainer"></ul>
+    <ul class="pagination" id="paginationContainer" aria-label="Page navigation"></ul>
 
     <!-- Toast -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-        <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+    <div class="gh-toast-wrap">
+        <div id="toast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive">
             <div class="d-flex">
                 <div class="toast-body" id="toastMessage"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                        data-bs-dismiss="toast"></button>
+                        data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
 
     <%- include("./partials/userFooter") %>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/userShop.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" ...></script>
 </body>
 </html>
