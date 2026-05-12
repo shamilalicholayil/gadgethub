@@ -435,7 +435,7 @@ document.getElementById("saveEditProductBtn").addEventListener("click", async ()
             showError("editProductError", data.message);
         }
     } catch (error) {
-        Swal.fire("Error!", "Something went wrong. Try again.", "error");
+        Swal.fire("Error!", error, "error");
     }
 });
 

@@ -655,7 +655,6 @@ const editProduct = async (req, res) => {
         if(!updatedProduct) return res.json({ success: false, message: "Product not found."});
         res.json({ success: true, message: "Product updated successfully." });
     } catch (error) {
-        console.log(error)
         res.json({ success: false, message: "Something went wrong." });
     }
 }
