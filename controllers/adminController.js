@@ -346,7 +346,16 @@ const deleteBrand = async (req, res) => {
 
 const getCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const { search } = req.query;
+        const query = {};
+
+        if(search) query.name = { $regex: search, $options: "i" };
+        const categories = await Category.find(query);
+
+        if(req.headers.accept.includes("application/json")) {
+            return res.json({ success: true, categories });
+        }
+
         res.render("admin/categories", { categories });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
