@@ -8,12 +8,14 @@ function showToast(message, type = "success") {
 }
 
 // Thumbnail Click
-document.querySelectorAll(".thumbnail-row img").forEach(thumb => {
-    thumb.addEventListener("click", () => {
-        document.getElementById("mainImage").src = thumb.dataset.url;
-        document.querySelectorAll(".thumbnail-row img").forEach(t => t.classList.remove("active"));
-        thumb.classList.add("active");
-        zoomBox.style.backgroundImage = `url('${thumb.dataset.url}')`;
+document.querySelectorAll('.thumb-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('mainImage').src = btn.dataset.url;
+        document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if(typeof zoomBox !== 'undefined') {
+            zoomBox.style.backgroundImage = `url('${btn.dataset.url}')`;
+        }
     });
 });
 
@@ -80,6 +82,42 @@ document.querySelector(".addToWishlistBtn")?.addEventListener("click", async () 
         showToast("Something went wrong.", "danger");
     }
 });
+
+// Tab switcher
+document.querySelectorAll('.pd-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.pd-tab').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.pd-tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+});
+
+// Star picker
+const starBtns = document.querySelectorAll('.star-pick-btn');
+const ratingInput = document.getElementById('reviewRating');
+if(starBtns.length) {
+    starBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = parseInt(btn.dataset.val);
+            ratingInput.value = val;
+            starBtns.forEach((b, i) => {
+                b.classList.toggle('picked', i < val);
+            });
+        });
+        btn.addEventListener('mouseenter', () => {
+            const val = parseInt(btn.dataset.val);
+            starBtns.forEach((b, i) => b.classList.toggle('hovered', i < val));
+        });
+    });
+    document.querySelector('.star-picker')?.addEventListener('mouseleave', () => {
+        starBtns.forEach(b => b.classList.remove('hovered'));
+    });
+}
 
 // Add Review
 document.getElementById("submitReview")?.addEventListener("click", async () => {
