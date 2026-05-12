@@ -1,223 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GadgetHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GadgetHub — Future Precision</title>
 
-<!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="/css/homeStyle.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/homeStyle.css">
 </head>
-
 <body>
 
-<!-- NAVBAR -->
 <%- include("./partials/userNavbar") %>
 
-<!-- HERO -->
-<section class="hero-section d-flex align-items-center">
-  <div class="container">
-    <div class="row align-items-center">
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section class="hero-section">
+    <div class="hero-noise"></div>
+    <div class="container hero-container">
 
-      <!-- LEFT CONTENT -->
-      <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0">
-
-        <h1 class="display-4 fw-bold text-light">
-          Future <br>
-          <span class="text-info">Precision.</span>
-        </h1>
-
-        <p class="text-secondary mt-3">
-          Discover the latest gadgets with cutting-edge technology.
-        </p>
-
-        <div class="mt-4 d-flex gap-3 justify-content-center justify-content-lg-start">
-          <a href="/shop" class="btn btn-info px-4 py-2">Featured Deals</a>
-          <a href="#" class="btn btn-secondary px-4 py-2">Learn More</a>
-        </div>
-      </div>
-
-      <!-- RIGHT IMAGE -->
-      <div class="col-lg-6 text-center">
-        <img src="/images/hero.webp" alt="Laptop" class="hero-img img-fluid">
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- CATEGORIES -->
-<section class="container" style="max-width:960px;">
- 
-  <p class="section-title text-uppercase fw-bold text-white-50 small mb-4">Categories</p>
- 
-  <div class="row g-3">
- 
-    <!-- LEFT: Smartphones -->
-    <div class="col-12 col-md-6">
-      <a href="shop?page=1&search=&category=<%= smartphoneCategory?._id || '' %>&brand=&sort=newest">
-        <div class="cat-card h-100" style="min-height:420px;">
-          <img src="/images/phone.png" alt="Smartphones" style="height:100%;"/>
-          <div class="cat-overlay"></div>
-          <div class="cat-label">
-            <div class="text-white fw-bold text-uppercase fs-2 lh-1">Smartphones</div>
-            <div class="text-info small mt-1">Explore Flagships →</div>
-          </div>
-        </div>
-      </a>
-    </div>
- 
-    <!-- RIGHT: Laptops + Audio/Gaming -->
-    <div class="col-12 col-md-6 d-flex flex-column gap-3">
- 
-      <!-- Laptops -->
-      <a href="shop?page=1&search=&category=<%= laptopCategory?._id || '' %>&brand=&sort=newest">
-        <div class="cat-card flex-fill" style="min-height:200px;">
-          <img src="/images/laptop.jpg" alt="Laptops"/>
-          <div class="cat-overlay"></div>
-          <div class="cat-label">
-            <div class="text-white fw-bold text-uppercase fs-4 lh-1">Laptops</div>
-            <div class="text-info small mt-1">Shop All →</div>
-          </div>
-        </div>
-      </a>
- 
-      <!-- Audio + Gaming -->
-      <div class="row g-3 flex-fill">
-        
-        <!-- Audio -->
-        <div class="col-6">
-          <a href="shop?page=1&search=&category=<%= audioCategory?._id || '' %>&brand=&sort=newest">
-            <div class="cat-card h-100" style="min-height:160px;">
-              <img src="/images/audio.jpg" alt="Audio"/>
-              <div class="cat-overlay"></div>
-              <div class="cat-label">
-                <div class="text-white fw-bold text-uppercase fs-5 lh-1">Audio</div>
-                <div class="text-info small mt-1">Shop All →</div>
-              </div>
+        <!-- Left -->
+        <div class="hero-copy">
+            <span class="hero-tag">
+                <span class="hero-tag-dot"></span>
+                New arrivals 2025
+            </span>
+            <h1 class="hero-heading">
+                Future<br>
+                <span class="hero-accent">Precision.</span>
+            </h1>
+            <p class="hero-sub">
+                Discover cutting-edge gadgets engineered for the world ahead.
+            </p>
+            <div class="hero-actions">
+                <a href="/shop" class="gh-btn-primary">
+                    Shop Now <i class="fa fa-arrow-right ms-1" aria-hidden="true"></i>
+                </a>
+                <a href="#categories" class="gh-btn-ghost">Browse Categories</a>
             </div>
-          </a>
-        </div>
 
-        <!-- Accessories -->
-        <div class="col-6">
-          <a href="shop?page=1&search=&category=<%= accessoriesCategory?._id || '' %>&brand=&sort=newest">
-            <div class="cat-card h-100" style="min-height:160px;">
-              <img src="/images/gaming.jpg" alt="Gaming"/>
-              <div class="cat-overlay"></div>
-              <div class="cat-label">
-                <div class="text-white fw-bold text-uppercase fs-5 lh-1">Accessories</div>
-                <div class="text-info small mt-1">Shop All →</div>
-              </div>
-            </div>
-          </a>
-        </div>
-
-      </div>
- 
-    </div><!-- /right col -->
-  </div><!-- /row -->
-</section>
-
-<!-- PRODUCTS -->
-<section class="container my-5">
-  <h5 class="mb-4">Featured Products</h5>
-
-  <div class="row g-4">
-
-    <!-- Product -->
-     <% products.forEach(product => { %>
-    <div class="col-md-3">
-      <div class="glass product-card text-center">
-        <img src="<%= product.images[0].url %>"
-              width="100" height="100"
-              style="object-fit:cover;border-radius:10px">
-        <h6><%= product.name %></h6>
-        <p class="price">₹<%= product.finalPrice %></p>
-        <a href="/product/<%= product._id %>" class="btn btn-info btn-sm">View Details</a>
-      </div>
-    </div>
-    <% }) %>
-
-  </div>
-</section>
-
-<!-- DEAL -->
-
-<% if(offerProducts.length > 0) { %>
-<section class="deal-section py-5 text-white">
-  <div class="container">
-    <div class="row align-items-center g-4">
-
-      <!-- LEFT -->
-      <div class="col-12 col-md-6">
-        <p class="text-uppercase small text-info mb-2">Limited Time Offer</p>
-        <h1 class="fw-bold display-6">Deals Of<br>The Day</h1>
-        <p class="text-secondary mt-3">Our most coveted tech items, now at exclusive prices.</p>
-        <div class="d-flex gap-3 mt-3 fw-bold">
-          <div><span id="hours" class="fs-4">00</span><br><small>HOURS</small></div>
-          <div><span id="minutes" class="fs-4">00</span><br><small>MINS</small></div>
-          <div><span id="seconds" class="fs-4">00</span><br><small>SECS</small></div>
-        </div>
-        <a href="/shop" class="btn btn-light mt-4 px-4 py-2 fw-semibold">SHOP THE SALE</a>
-      </div>
-
-      <!-- RIGHT — Carousel -->
-      <div class="col-12 col-md-6 text-center">
-        <div id="offerCarousel" class="carousel slide" data-bs-ride="carousel">
-
-          <div class="carousel-inner">
-            <% offerProducts.forEach((product, index) => { %>
-              <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                <img src="<%= product.images[0].url %>"
-                     class="img-fluid rounded-5"
-                     style="max-height: 280px; object-fit: contain;"
-                     alt="<%= product.name %>">
-                <h6 class="mt-3"><%= product.name %></h6>
-                <div class="d-flex justify-content-center align-items-center gap-2">
-                  <span class="text-info fw-bold">₹<%= product.finalPrice %></span>
-                  <small class="text-decoration-line-through text-secondary">₹<%= product.price %></small>
-                  <span class="badge bg-danger">-<%= product.offerPercent %>%</span>
+            <!-- Stats row -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-num">12K+</span>
+                    <span class="hero-stat-label">Products</span>
                 </div>
-              </div>
-            <% }) %>
-          </div>
-
-          <% if(offerProducts.length > 1) { %>
-            <button class="carousel-control-prev" type="button" data-bs-target="#offerCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#offerCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </button>
-          <% } %>
-
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-num">98%</span>
+                    <span class="hero-stat-label">Satisfaction</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-num">50+</span>
+                    <span class="hero-stat-label">Brands</span>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- Right image -->
+        <div class="hero-image-wrap">
+            <div class="hero-glow-ring"></div>
+            <img src="/images/hero.webp" alt="Featured gadget" class="hero-img">
+        </div>
 
     </div>
-  </div>
+
+    <!-- Scrolling ticker -->
+    <div class="hero-ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <span>FREE SHIPPING OVER ₹999</span>
+            <span class="ticker-dot">·</span>
+            <span>NEW ARRIVALS EVERY WEEK</span>
+            <span class="ticker-dot">·</span>
+            <span>12-MONTH WARRANTY</span>
+            <span class="ticker-dot">·</span>
+            <span>FREE SHIPPING OVER ₹999</span>
+            <span class="ticker-dot">·</span>
+            <span>NEW ARRIVALS EVERY WEEK</span>
+            <span class="ticker-dot">·</span>
+            <span>12-MONTH WARRANTY</span>
+            <span class="ticker-dot">·</span>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CATEGORIES
+══════════════════════════════════════════════ -->
+<section class="section-gap" id="categories">
+    <div class="container">
+
+        <div class="section-header">
+            <div>
+                <p class="section-eyebrow">Browse by type</p>
+                <h2 class="section-title">Categories</h2>
+            </div>
+            <a href="/shop" class="gh-btn-ghost d-none d-md-inline-flex">
+                View all <i class="fa fa-arrow-right ms-1" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <!-- Bento grid layout -->
+        <div class="cat-grid">
+
+            <!-- Smartphones — tall left card -->
+            <a href="shop?page=1&search=&category=<%= smartphoneCategory?._id || '' %>&brand=&sort=newest"
+               class="cat-card cat-card--tall" aria-label="Shop Smartphones">
+                <img src="/images/phone.png" alt="Smartphones" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-label">
+                    <span class="cat-name">Smartphones</span>
+                    <span class="cat-cta">Explore Flagships <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </a>
+
+            <!-- Laptops — wide top right -->
+            <a href="shop?page=1&search=&category=<%= laptopCategory?._id || '' %>&brand=&sort=newest"
+               class="cat-card cat-card--wide" aria-label="Shop Laptops">
+                <img src="/images/laptop.jpg" alt="Laptops" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-label">
+                    <span class="cat-name">Laptops</span>
+                    <span class="cat-cta">Shop All <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </a>
+
+            <!-- Audio — small bottom right -->
+            <a href="shop?page=1&search=&category=<%= audioCategory?._id || '' %>&brand=&sort=newest"
+               class="cat-card" aria-label="Shop Audio">
+                <img src="/images/audio.jpg" alt="Audio" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-label">
+                    <span class="cat-name">Audio</span>
+                    <span class="cat-cta">Shop All <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </a>
+
+            <!-- Accessories — small bottom right -->
+            <a href="shop?page=1&search=&category=<%= accessoriesCategory?._id || '' %>&brand=&sort=newest"
+               class="cat-card" aria-label="Shop Accessories">
+                <img src="/images/gaming.jpg" alt="Accessories" loading="lazy">
+                <div class="cat-overlay"></div>
+                <div class="cat-label">
+                    <span class="cat-name">Accessories</span>
+                    <span class="cat-cta">Shop All <i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURED PRODUCTS
+══════════════════════════════════════════════ -->
+<section class="section-gap">
+    <div class="container">
+
+        <div class="section-header">
+            <div>
+                <p class="section-eyebrow">Hand-picked for you</p>
+                <h2 class="section-title">Featured Products</h2>
+            </div>
+            <a href="/shop" class="gh-btn-ghost d-none d-md-inline-flex">
+                View all <i class="fa fa-arrow-right ms-1" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div class="products-grid">
+            <% products.forEach(product => { %>
+            <a href="/product/<%= product._id %>" class="fp-card" aria-label="<%= product.name %>">
+                <div class="fp-img-wrap">
+                    <img src="<%= product.images[0].url %>"
+                         alt="<%= product.name %>"
+                         loading="lazy">
+                </div>
+                <div class="fp-body">
+                    <p class="fp-name"><%= product.name %></p>
+                    <div class="fp-footer">
+                        <span class="fp-price">₹<%= product.finalPrice.toLocaleString('en-IN') %></span>
+                        <span class="fp-btn" aria-hidden="true">
+                            <i class="fa fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            <% }) %>
+        </div>
+
+        <!-- Mobile view-all -->
+        <div class="text-center mt-4 d-md-none">
+            <a href="/shop" class="gh-btn-primary">View All Products</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     DEAL OF THE DAY
+══════════════════════════════════════════════ -->
+<% if(offerProducts.length > 0) { %>
+<section class="section-gap">
+    <div class="container">
+        <div class="deal-card">
+
+            <!-- Left -->
+            <div class="deal-copy">
+                <span class="deal-tag">
+                    <i class="fa fa-bolt" aria-hidden="true"></i>
+                    Limited Time
+                </span>
+                <h2 class="deal-heading">Deals Of<br>The Day</h2>
+                <p class="deal-sub">Coveted tech items at exclusive prices. Don't miss out.</p>
+
+                <!-- Countdown -->
+                <div class="deal-countdown" aria-label="Time remaining">
+                    <div class="countdown-unit">
+                        <span class="countdown-num" id="hours">00</span>
+                        <span class="countdown-label">HRS</span>
+                    </div>
+                    <span class="countdown-sep">:</span>
+                    <div class="countdown-unit">
+                        <span class="countdown-num" id="minutes">00</span>
+                        <span class="countdown-label">MIN</span>
+                    </div>
+                    <span class="countdown-sep">:</span>
+                    <div class="countdown-unit">
+                        <span class="countdown-num" id="seconds">00</span>
+                        <span class="countdown-label">SEC</span>
+                    </div>
+                </div>
+
+                <a href="/shop" class="gh-btn-primary mt-4 d-inline-flex">
+                    Shop the Sale <i class="fa fa-arrow-right ms-2" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <!-- Right: Carousel -->
+            <div class="deal-carousel-wrap">
+                <div id="offerCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <% offerProducts.forEach((product, index) => { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                            <div class="deal-product">
+                                <div class="deal-img-wrap">
+                                    <img src="<%= product.images[0].url %>"
+                                         alt="<%= product.name %>"
+                                         loading="lazy">
+                                </div>
+                                <p class="deal-product-name"><%= product.name %></p>
+                                <div class="deal-pricing">
+                                    <span class="deal-final">₹<%= product.finalPrice.toLocaleString('en-IN') %></span>
+                                    <span class="deal-original">₹<%= product.price.toLocaleString('en-IN') %></span>
+                                    <span class="deal-badge">-<%= product.offerPercent %>%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+
+                    <% if(offerProducts.length > 1) { %>
+                    <div class="carousel-nav">
+                        <button class="carousel-nav-btn" type="button"
+                                data-bs-target="#offerCarousel" data-bs-slide="prev"
+                                aria-label="Previous product">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="carousel-nav-btn" type="button"
+                                data-bs-target="#offerCarousel" data-bs-slide="next"
+                                aria-label="Next product">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 <% } %>
 
+
 <!-- BRAND LOGOS -->
-<section class="container text-center brand-logos my-5">
-  <img src="images/apple.png" class="mx-3">
-  <img src="images/samsung.png" class="mx-3">
-  <img src="images/sony.png" class="mx-3">
-  <img src="images/dell.png" class="mx-3">
+<section class="section-gap brand-section">
+    <div class="container">
+        <p class="brand-eyebrow">Trusted brands</p>
+        <div class="brand-strip">
+            <div class="brand-logo"><img src="/images/apple.png"   alt="Apple"></div>
+            <div class="brand-logo"><img src="/images/samsung.png" alt="Samsung"></div>
+            <div class="brand-logo"><img src="/images/sony.png"    alt="Sony"></div>
+            <div class="brand-logo"><img src="/images/dell.png"    alt="Dell"></div>
+        </div>
+    </div>
 </section>
 
-<!-- FOOTER -->
 <%- include("./partials/userFooter") %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

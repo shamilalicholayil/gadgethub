@@ -322,7 +322,7 @@ const getShop = async (req, res) => {
     const sortOptions = {
         price_asc: { finalPrice:  1 },
         price_desc: { finalPrice: -1 },
-         newest: { createdAt:  -1 }
+        newest: { createdAt:  -1 }
     };
     const sortBy = sortOptions[sort] || { createdAt: -1 };
     try {
