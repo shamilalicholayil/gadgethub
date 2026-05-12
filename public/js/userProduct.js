@@ -19,34 +19,34 @@ document.querySelectorAll(".thumbnail-row img").forEach(thumb => {
 
 // Zoom
 const container  = document.getElementById("imgContainer");
-const lens       = document.getElementById("lens");
-const zoomBox    = document.getElementById("zoomBox");
-const mainImage  = document.getElementById("mainImage");
-const ZOOM       = 2.5;
+const lens = document.getElementById("lens");
+const zoomBox = document.getElementById("zoomBox");
+const mainImage = document.getElementById("mainImage");
+const ZOOM = 2.5;
 
 container.addEventListener("mousemove", (e) => {
     const rect = container.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
-    x = Math.max(lens.offsetWidth / 2,  Math.min(x, rect.width  - lens.offsetWidth  / 2));
+    x = Math.max(lens.offsetWidth / 2, Math.min(x, rect.width  - lens.offsetWidth  / 2));
     y = Math.max(lens.offsetHeight / 2, Math.min(y, rect.height - lens.offsetHeight / 2));
 
-    lens.style.left    = (x - lens.offsetWidth  / 2) + "px";
-    lens.style.top     = (y - lens.offsetHeight / 2) + "px";
+    lens.style.left = (x - lens.offsetWidth  / 2) + "px";
+    lens.style.top = (y - lens.offsetHeight / 2) + "px";
     lens.style.display = "block";
     zoomBox.style.display = "block";
 
-    const bgX = (x / rect.width)  * rect.width  * ZOOM - zoomBox.offsetWidth  / 2;
+    const bgX = (x / rect.width) * rect.width  * ZOOM - zoomBox.offsetWidth  / 2;
     const bgY = (y / rect.height) * rect.height * ZOOM - zoomBox.offsetHeight / 2;
 
-    zoomBox.style.backgroundImage    = `url('${mainImage.src}')`;
-    zoomBox.style.backgroundSize     = `${rect.width * ZOOM}px ${rect.height * ZOOM}px`;
+    zoomBox.style.backgroundImage = `url('${mainImage.src}')`;
+    zoomBox.style.backgroundSize = `${rect.width * ZOOM}px ${rect.height * ZOOM}px`;
     zoomBox.style.backgroundPosition = `-${bgX}px -${bgY}px`;
 });
 
 container.addEventListener("mouseleave", () => {
-    lens.style.display    = "none";
+    lens.style.display = "none";
     zoomBox.style.display = "none";
 });
 
@@ -84,8 +84,8 @@ document.querySelector(".addToWishlistBtn")?.addEventListener("click", async () 
 // Add Review
 document.getElementById("submitReview")?.addEventListener("click", async () => {
     const productId = document.getElementById("submitReview").dataset.id;
-    const rating    = parseInt(document.getElementById("reviewRating").value);
-    const comment   = document.getElementById("reviewComment").value.trim();
+    const rating = parseInt(document.getElementById("reviewRating").value);
+    const comment = document.getElementById("reviewComment").value.trim();
 
     if (!rating || isNaN(rating) || rating < 1 || rating > 5) {
         showToast("Rating must be between 1 and 5.", "danger");
