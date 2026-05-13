@@ -3,88 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Register — GadgetHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
 </head>
-<body class="bg-dark text-white">
-    <header class="d-flex justify-content-start p-4">
-        <h5 class="text-info fw-bold">GADGETHUB</h5>
-    </header>
-    <div class="d-flex justify-content-center align-items-center vh-75">
-        <div class="card glass p-4 rounded-4">
-            <div class="d-flex justify-content-center gap-4 mb-4 small">
-                <a href="/login" class="nav-link"><span class="text-secondary">Login</span></a>
-                <a href="#" class="nav-link"><span class="text-info border-bottom border-info pb-1">Register</span></a>
+<body class="login-body">
+
+    <!-- ── Animated background ── -->
+    <div class="login-bg" aria-hidden="true">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-grid"></div>
+    </div>
+
+    <div class="login-shell">
+
+        <!-- ══ LEFT PANEL ══ -->
+        <aside class="login-left" aria-hidden="true">
+            <div class="login-left-inner">
+
+                <!-- Logo -->
+                <div class="ll-logo">
+                    <span class="ll-logo-text">GADGETHUB</span>
+                </div>
+
+                <!-- Headline -->
+                <div class="ll-copy">
+                    <h2 class="ll-heading">
+                        Join the<br>
+                        <span class="ll-accent">obsidian</span><br>
+                        community.
+                    </h2>
+                    <p class="ll-sub">
+                        Create your account and get access to exclusive deals, early launches, and next-day delivery.
+                    </p>
+                </div>
+
+                <!-- Stat pills -->
+                <div class="ll-stats">
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-user-group" aria-hidden="true"></i>
+                        <span>50,000+ Members</span>
+                    </div>
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-tag" aria-hidden="true"></i>
+                        <span>Member-only Discounts</span>
+                    </div>
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-truck-fast" aria-hidden="true"></i>
+                        <span>Priority Shipping</span>
+                    </div>
+                </div>
+
+                <!-- Circuit SVG -->
+                <svg class="ll-circuit" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 100 H60 L80 80 H140 L160 100 H220 L240 80 H300" stroke="rgba(6,182,212,0.2)" stroke-width="1.5"/>
+                    <path d="M0 130 H40 L60 110 H100" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+                    <circle cx="80"  cy="80"  r="3"   fill="rgba(6,182,212,0.4)"/>
+                    <circle cx="160" cy="100" r="3"   fill="rgba(6,182,212,0.4)"/>
+                    <circle cx="240" cy="80"  r="3"   fill="rgba(6,182,212,0.25)"/>
+                    <path d="M140 80 V40 H180" stroke="rgba(6,182,212,0.15)" stroke-width="1"/>
+                    <circle cx="180" cy="40"  r="2.5" fill="rgba(6,182,212,0.3)"/>
+                </svg>
+
             </div>
-            <form action="/register" method="POST" id="registerForm" novalidate>
-                <label class="form-label small text-secondary">USERNAME</label>
-                <div class="input-group mb-1">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-person"></i>
-                    </span>
-                    <input type="text" id="name" name="name"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="username">
-                </div>
-                <span class="text-danger small d-block mb-3" id="nameError"></span>
+        </aside>
 
-                <label class="form-label small text-secondary">EMAIL ADDRESS</label>
-                <div class="input-group mb-1">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-envelope"></i>
-                    </span>
-                    <input type="email" id="email" name="email"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="name@example.com">
-                </div>
-                <span class="text-danger small d-block mb-3" id="emailError"></span>
+        <!-- ══ RIGHT PANEL ══ -->
+        <main class="login-right">
 
-                <label class="form-label small text-secondary">PASSWORD</label>
-                <div class="input-group mb-1">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-lock"></i>
-                    </span>
-                    <input type="password" id="password" name="password"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="••••••••">
+            <!-- Mobile logo -->
+            <div class="login-mobile-logo">
+                <div class="ll-logo-mark sm">
+                    <span></span><span></span><span></span><span></span>
                 </div>
-                <span class="text-danger small d-block mb-3" id="passwordError"></span>
+                <span class="ll-logo-text">GADGETHUB</span>
+            </div>
 
-                <label class="form-label small text-secondary">CONFIRM PASSWORD</label>
-                <div class="input-group mb-1">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-lock"></i>
-                    </span>
-                    <input type="password" id="confirmPassword" name="confirmPassword"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="••••••••">
+            <div class="login-card">
+
+                <!-- Tabs -->
+                <div class="login-tabs" role="tablist">
+                    <a href="/login" class="login-tab" role="tab" aria-selected="false">Sign In</a>
+                    <span class="login-tab active" role="tab" aria-selected="true">Register</span>
                 </div>
-                <span class="text-danger small d-block mb-3" id="confirmPasswordError"></span>
 
-                <% if(error) { %>
-                    <p class="text-danger"><%= error %></p>
-                <% } %>
-                <button type="submit" class="btn btn-info w-100 fw-bold py-2 mt-2">Register</button>
-            </form>
-            <p class="text-center small text-secondary mt-3">
-                By continuing, you agree to
-                <span class="text-info">Terms of Excellence</span>
-            </p>
-        </div>
+                <h1 class="login-card-heading">Create account</h1>
+                <p class="login-card-sub">Fill in your details to get started.</p>
+
+                <!-- Form -->
+                <form action="/register" method="POST" id="registerForm" novalidate>
+
+                    <!-- Server error -->
+                    <% if(error) { %>
+                    <div class="login-server-error" role="alert">
+                        <i class="fa fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span><%= error %></span>
+                    </div>
+                    <% } %>
+
+                    <!-- Username -->
+                    <div class="login-field">
+                        <label class="login-label" for="name">Username</label>
+                        <div class="login-input-wrap" id="nameGroup">
+                            <i class="fa fa-user login-input-icon" aria-hidden="true"></i>
+                            <input type="text" id="name" name="name"
+                                   class="login-input"
+                                   placeholder="your_username"
+                                   autocomplete="username"
+                                   aria-describedby="nameError">
+                        </div>
+                        <span class="login-error" id="nameError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="login-field">
+                        <label class="login-label" for="email">Email address</label>
+                        <div class="login-input-wrap" id="emailGroup">
+                            <i class="fa fa-envelope login-input-icon" aria-hidden="true"></i>
+                            <input type="email" id="email" name="email"
+                                   class="login-input"
+                                   placeholder="name@example.com"
+                                   autocomplete="email"
+                                   aria-describedby="emailError">
+                        </div>
+                        <span class="login-error" id="emailError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="login-field">
+                        <label class="login-label" for="password">Password</label>
+                        <div class="login-input-wrap" id="passwordGroup">
+                            <i class="fa fa-lock login-input-icon" aria-hidden="true"></i>
+                            <input type="password" id="password" name="password"
+                                   class="login-input"
+                                   placeholder="Min 8 chars, 1 uppercase, 1 number"
+                                   autocomplete="new-password"
+                                   aria-describedby="passwordError">
+                            <button type="button" class="login-eye-btn" id="eyeBtn1" aria-label="Show password">
+                                <i class="fa fa-eye" id="eyeIcon1" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <span class="login-error" id="passwordError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="login-field">
+                        <label class="login-label" for="confirmPassword">Confirm password</label>
+                        <div class="login-input-wrap" id="confirmPasswordGroup">
+                            <i class="fa fa-lock login-input-icon" aria-hidden="true"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword"
+                                   class="login-input"
+                                   placeholder="••••••••"
+                                   autocomplete="new-password"
+                                   aria-describedby="confirmPasswordError">
+                            <button type="button" class="login-eye-btn" id="eyeBtn2" aria-label="Show confirm password">
+                                <i class="fa fa-eye" id="eyeIcon2" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <span class="login-error" id="confirmPasswordError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <button type="submit" class="login-submit-btn mt-2">
+                        <span>Create Account</span>
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+
+                </form>
+
+                <!-- Terms note -->
+                <p class="register-terms">
+                    By registering, you agree to our
+                    <a href="#">Terms of Excellence</a> and
+                    <a href="#">Privacy Policy</a>.
+                </p>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="login-footer">
+                <span>© 2024 GadgetHub Obsidian</span>
+                <div class="login-footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Support</a>
+                </div>
+            </footer>
+
+        </main>
     </div>
-    <div class="d-flex justify-content-between p-4 small text-secondary">
-        <div>
-            <strong>GadgetHub</strong><br>
-            © 2024 GADGETHUB OBSIDIAN
-        </div>
-        <div class="d-flex gap-3">
-            <span>PRIVACY</span>
-            <span>TERMS</span>
-            <span>SUPPORT</span>
-        </div>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/userRegister.js"></script>
 </body>
