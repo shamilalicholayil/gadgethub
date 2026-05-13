@@ -1,5 +1,5 @@
 body {
-  background: radial-gradient(circle at 20% 20%, #0a1a2f, #020617);
+  background: radial-gradient(ellipse 80% 50% at 20% 0%, #0a1a2f 0%, #020617 65%);
   margin: 0;
   overflow: hidden;
 }
@@ -30,7 +30,6 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
   backdrop-filter: blur(20px);
-  box-shadow: 0 0 30px rgba(0, 200, 255, 0.15);
   transition: 0.3s;
 }
 
@@ -65,7 +64,6 @@ body {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  box-shadow: 0 0 40px rgba(0, 200, 255, 0.15);
 }
 
 .custom-input {
@@ -76,6 +74,5 @@ body {
 }
 
 .custom-input:focus {
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
   border: 1px solid #0dcaf0;
 }
