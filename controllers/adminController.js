@@ -248,7 +248,17 @@ const downloadReport = async (req, res) => {
 
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find();
+        const { search } = req.query;
+        const query = {};
+
+        if(search) query.name = { $regex: search, $options: "i" };
+
+        const users = await User.find(query);
+
+        if(req.headers.accept.includes("application/json")) {
+            return res.json({ success: true, users });
+        }
+
         res.render("admin/users", { users });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
@@ -273,8 +283,17 @@ const blockUser = async (req, res) => {
 
 const getBrands = async (req, res) => {
     try {
-        const brands = await Brand.find();
-        res.render("admin/brands", { brands });
+         const { search } = req.query;
+        const query = {};
+
+        if(search) query.name = { $regex: search, $options: "i" };
+        const brands = await Brand.find(query);
+
+        if(req.headers.accept.includes("application/json")) {
+            return res.json({ success: true, brands });
+        }
+
+        res.render("admin/brands");
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }
@@ -356,7 +375,7 @@ const getCategories = async (req, res) => {
             return res.json({ success: true, categories });
         }
 
-        res.render("admin/categories", { categories });
+        res.render("admin/categories");
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }

@@ -1,10 +1,64 @@
+// Toast
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    const toastMessage = document.getElementById("toastMessage");
+    toast.className = `toast align-items-center text-white border-0 bg-${type}`;
+    toastMessage.textContent = message;
+    new bootstrap.Toast(toast, { delay: 3000 }).show();
+}
 
-// Block Users
-document.querySelectorAll(".blockBtn").forEach(btn => {
-    btn.addEventListener("click", async () => {
+// Render Users
+function renderUsers(users) {
+    const tbody = document.getElementById("userTableBody");
+    if (users.length === 0) {
+        tbody.innerHTML = `<div class="text-center py-5 text-secondary">User not found.</div>`;
+        return;
+    }
+    tbody.innerHTML = users.map(user => `
+        <tr>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>
+                ${user.isBlocked
+                    ?`<span class="badge bg-danger">Blocked</span>`
+                    :`<span class="badge bg-success">Active</span>`
+                }
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-danger blockBtn"
+                        data-id="${user._id}"
+                        data-blocked="${user.isBlocked }">
+                    <i class="fa fa-power-off"></i>
+                    ${user.isBlocked
+                        ?`Unblock`
+                        :`Block`
+                    }
+                    </button>
+                </td>
+            </tr>
+    `).join("");
+}
 
-        const id = btn.dataset.id;
-        const isBlocked = btn.dataset.blocked === "true";
+// Search
+let timer;
+document.getElementById("searchInput").addEventListener("input", (e) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        fetch(`/admin/users?search=${e.target.value}`, {
+            headers: { "Accept": "application/json" }
+        })
+        .then(res => res.json())
+        .then(data => { if (data.success) renderUsers(data.users); })
+        .catch((error) => showToast("Search failed", "danger"));
+    }, 400);
+});
+
+// Event Delegation
+document.getElementById("userTableBody").addEventListener("click", async (e) => {
+    const blockBtn = e.target.closest(".blockBtn");
+    if(blockBtn) {
+        const id = blockBtn.dataset.id;
+        const isBlocked = blockBtn.dataset.blocked === "true";
 
         try {
             const result = await Swal.fire({
@@ -34,5 +88,12 @@ document.querySelectorAll(".blockBtn").forEach(btn => {
         } catch (error) {
             Swal.fire("Error!", "Something went wrong. Try again.", "error");
         }
-    });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("/admin/users", { headers: { "Accept": "application/json" } })
+        .then(res => res.json())
+        .then(data => { if (data.success) renderUsers(data.users); })
+        .catch(() => showToast("Failed to load users", "danger"));
 });

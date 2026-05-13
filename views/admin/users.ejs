@@ -15,6 +15,10 @@
         <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between p-4">
                 <h4 class="text-info fw-bold">Users</h4>
+                <input type="text" 
+                        id="searchInput"
+                        placeholder="Search Name" 
+                        class="form-control bg-black custom-input border-secondary w-50">
             </div>
 
             <div class="container mt-4">
@@ -27,40 +31,20 @@
                             <th>Block/Unblock</th>
                         </tr>
                     </thead>
-                    <tbody id="categoryTableBody">
-                        <% if(users.length === 0) { %>
-                            <tr>
-                                <td colspan="4" class="text-center py-3">User not found.</td>
-                            </tr>
-                        <% } else { %>
-                            <% users.forEach(user => { %>
-                                <tr>
-                                    <td><%= user.name %></td>
-                                    <td><%= user.email %></td>
-                                    <td>
-                                        <% if(user.isBlocked) { %>
-                                            <span class="badge bg-danger">Blocked</span>
-                                        <% } else { %>
-                                            <span class="badge bg-success">Active</span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger blockBtn"
-                                            data-id="<%= user._id %>"
-                                            data-blocked="<%= user.isBlocked %>">
-                                            <i class="fa fa-power-off"></i>
-                                            <% if(user.isBlocked) { %>
-                                                Unblock
-                                            <% } else { %>
-                                                Block
-                                            <% } %>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        <% } %>
-                    </tbody>
+                    <tbody id="userTableBody"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                        data-bs-dismiss="toast">
+                </button>
             </div>
         </div>
     </div>

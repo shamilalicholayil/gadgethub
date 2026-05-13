@@ -311,3 +311,10 @@ document.getElementById("categoryTableBody").addEventListener("click", async (e)
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("/admin/categories", { headers: { "Accept": "application/json" } })
+        .then(res => res.json())
+        .then(data => { if (data.success) renderCategories(data.categories); })
+        .catch(() => showToast("Failed to load categories", "danger"));
+});
