@@ -142,7 +142,8 @@ const getDashboard = async (req, res) => {
             totalOrders, totalRevenue,
             ordersByStatus, monthlySales,
             dailySales, sixMonthSales, yearlySales,
-            topProducts, categorySales
+            topProducts, categorySales,
+            currentPage: "dashboard"
         });
     } catch(error) {
         res.render("admin/dashboard", { error: "Something went wrong." });
@@ -259,7 +260,7 @@ const getUsers = async (req, res) => {
             return res.json({ success: true, users });
         }
 
-        res.render("admin/users", { users });
+        res.render("admin/users", { currentPage: "users" });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }
@@ -293,7 +294,7 @@ const getBrands = async (req, res) => {
             return res.json({ success: true, brands });
         }
 
-        res.render("admin/brands");
+        res.render("admin/brands", { currentPage: "brands" });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }
@@ -375,7 +376,7 @@ const getCategories = async (req, res) => {
             return res.json({ success: true, categories });
         }
 
-        res.render("admin/categories");
+        res.render("admin/categories", { currentPage: "categories" });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }
@@ -458,7 +459,7 @@ const getCoupons = async (req, res) => {
             return res.json({ success: true, coupons });
         }
 
-        res.render("admin/coupons", { coupons });
+        res.render("admin/coupons", { coupons, currentPage: "coupons" });
     } catch (error) {
         res.render("admin/dashboard", { error: "Something went wrong. Try again." });
     }
@@ -588,7 +589,7 @@ const getProducts = async (req, res) => {
             return res.json({ success: true, products, brands, categories, currentPage, totalPages });
         }
 
-        res.render("admin/products", { products, brands, categories, currentPage, totalPages });
+        res.render("admin/products", { products, brands, categories, currentPage, totalPages, currentPage: "products" });
     } catch (error) {
         res.json({ success: false, message: "Something went wrong." });
     }
@@ -716,7 +717,7 @@ const deleteProduct = async (req, res) => {
 const getAdminOrders = async (req, res) => {
     try {
         const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
-        res.render("admin/orders", { orders });
+        res.render("admin/orders", { orders, currentPage: "orders" });
     } catch (error) {
         res.render("admin/orders", { orders: [], error: "Something went wrong." })
     }
