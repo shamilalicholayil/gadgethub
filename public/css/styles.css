@@ -32,13 +32,14 @@ body {
 
 .glass {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
   backdrop-filter: blur(20px);
-  transition: transform 0.3s;
+  transition: border-color 0.2;
 }
 
 .glass:hover {
-  transform: translateY(-4px);
+  border-color: rgba(13,202,240,0.2);
 }
 
 .table-transparant {
@@ -223,6 +224,33 @@ body {
 }
 
 .search-wrap input { padding-left: 36px; }
+
+/* Add image slot inputs styled nicely */
+.img-slot-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border: 2px dashed rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 22px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.img-slot-label:hover {
+  border-color: rgba(13,202,240,0.4);
+  color: #0dcaf0;
+}
+
+/* Loading state inside tbody */
+.table-loading {
+  text-align: center;
+  padding: 48px 24px;
+  color: #64748b;
+  font-size: 14px;
+}
 
 /* Tablet */
 @media (max-width: 991px) {
