@@ -716,11 +716,26 @@ const deleteProduct = async (req, res) => {
 
 const getAdminOrders = async (req, res) => {
     try {
-        const orders = await Order.find().populate("user", "name email").sort({ createdAt: -1 });
+        const { search, status } = req.query;
+        const query = {};
+
+        if(search) query.name = { $regex: search, $options: "i" };
+        if(status) query.orderStatus = status;
+
+        const orders = await Order.find(query).populate("user", "name email").sort({ createdAt: -1 });
+
+        if(req.headers.accept.includes("application/json")) {
+            return res.json({ success: true, orders });
+        }
+
         res.render("admin/orders", { orders, currentPage: "orders" });
     } catch (error) {
         res.render("admin/orders", { orders: [], error: "Something went wrong." })
     }
+}
+
+const getAdminOrderDetails = (req, res) => {
+    res.render("admin/OrderDetails", { currentPage: "orders"})
 }
 
 const updateOrderStatus = async (req, res) => {
@@ -774,5 +789,6 @@ module.exports = {
     deleteProduct,
 
     getAdminOrders,
+    getAdminOrderDetails,
     updateOrderStatus
 }

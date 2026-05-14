@@ -168,7 +168,6 @@ document.getElementById("paginationContainer").addEventListener("click", (e) => 
 });
 
 // Render Products
-
 function renderProducts(products) {
     const tbody = document.getElementById("productTableBody");
     if (products.length === 0) {

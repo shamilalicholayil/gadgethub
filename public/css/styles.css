@@ -225,7 +225,7 @@ body {
 
 .search-wrap input { padding-left: 36px; }
 
-/* Add image slot inputs styled nicely */
+/* Add image slot */
 .img-slot-label {
   display: inline-flex;
   align-items: center;

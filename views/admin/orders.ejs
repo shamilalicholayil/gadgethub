@@ -16,6 +16,15 @@
             <div class="main-content">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="text-info fw-bold">Order Management</h4>
+                    <select name="status" id="orderStatus" class="bg-black custom-input w-25">
+                        <option value="">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="returned">Returned</option>
+                    </select>
                 </div>
 
                 <div class="glass p-4">
@@ -31,50 +40,7 @@
                                 <th>UPDATE</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <% if(orders.length === 0) { %>
-                                <tr>
-                                    <td colspan="7" class="text-center text-secondary py-4">No orders yet.</td>
-                                </tr>
-                            <% } else { %>
-                                <% orders.forEach(order => { %>
-                                    <tr>
-                                        <td class="text-secondary small">#<%= order._id.toString().slice(-6).toUpperCase() %></td>
-                                        <td>
-                                            <p class="mb-0 small"><%= order.user.name %></p>
-                                            <small class="text-secondary"><%= order.user.email %></small>
-                                        </td>
-                                        <td class="text-secondary small"><%= order.createdAt.toDateString() %></td>
-                                        <td class="text-info">₹<%= order.totalAmount %></td>
-                                        <td>
-                                            <span class="badge <%= order.paymentStatus === 'paid' ? 'bg-success' : 'bg-warning text-dark' %>">
-                                                <%= order.paymentMethod.toUpperCase() %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge
-                                                <% if(order.orderStatus === 'delivered') { %>bg-success
-                                                <% } else if(order.orderStatus === 'cancelled') { %>bg-danger
-                                                <% } else if(order.orderStatus === 'returned') { %>bg-secondary
-                                                <% } else { %>bg-warning text-dark<% } %>">
-                                                <%= order.orderStatus.toUpperCase() %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <select class="form-select form-select-sm statusSelect bg-dark text-white border-secondary"
-                                                    data-id="<%= order._id %>"
-                                                    <% if(order.orderStatus === 'cancelled' || order.orderStatus === 'returned') { %>disabled<% } %>>
-                                                <option value="pending"    <%= order.orderStatus === 'pending'    ? 'selected' : '' %>>Pending</option>
-                                                <option value="processing" <%= order.orderStatus === 'processing' ? 'selected' : '' %>>Processing</option>
-                                                <option value="shipped"    <%= order.orderStatus === 'shipped'    ? 'selected' : '' %>>Shipped</option>
-                                                <option value="delivered"  <%= order.orderStatus === 'delivered'  ? 'selected' : '' %>>Delivered</option>
-                                                <option value="cancelled"  <%= order.orderStatus === 'cancelled'  ? 'selected' : '' %>>Cancelled</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                <% }) %>
-                            <% } %>
-                        </tbody>
+                        <tbody id="orderTableBody"></tbody>
                     </table>
                 </div>
             </div>

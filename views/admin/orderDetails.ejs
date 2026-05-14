@@ -10,7 +10,8 @@
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-    <link rel="stylesheet" href="/css/adminOrderDetails.css">
+  <link rel="stylesheet" href="/css/adminSidebar.css">
+    <link rel="stylesheet" href="/css/orderDetails.css">
 </head>
 
 <body>
@@ -18,39 +19,7 @@
   <div class="d-flex">
 
     <!-- SIDEBAR -->
-    <div class="sidebar glass p-4">
-
-      <h3 class="fw-bold mb-4">
-        <i class="fa-solid fa-layer-group custom-color"></i>
-        Admin
-      </h3>
-
-      <a href="#" class="sidebar-link">
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-      </a>
-
-      <a href="#" class="sidebar-link">
-        <i class="fa-solid fa-box"></i>
-        Products
-      </a>
-
-      <a href="#" class="sidebar-link active">
-        <i class="fa-solid fa-bag-shopping"></i>
-        Orders
-      </a>
-
-      <a href="#" class="sidebar-link">
-        <i class="fa-solid fa-users"></i>
-        Customers
-      </a>
-
-      <a href="#" class="sidebar-link">
-        <i class="fa-solid fa-gear"></i>
-        Settings
-      </a>
-
-    </div>
+    <%- include("../partials/adminSidebar") %>
 
     <!-- MAIN -->
     <div class="main-content">
