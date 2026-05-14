@@ -7,35 +7,40 @@ function showToast(message, type = "success") {
     new bootstrap.Toast(toast, { delay: 3000 }).show();
 }
 
-// Render Users
+// Render users as cards
 function renderUsers(users) {
-    const tbody = document.getElementById("userTableBody");
+    const list = document.getElementById("userList");
+
     if (users.length === 0) {
-        tbody.innerHTML = `<div class="text-center py-5 text-secondary">User not found.</div>`;
+        list.innerHTML = `
+            <div class="user-empty">
+                <i class="fa fa-users-slash"></i>
+                No users found.
+            </div>`;
         return;
     }
-    tbody.innerHTML = users.map(user => `
-        <tr>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>
-                ${user.isBlocked
-                    ?`<span class="badge bg-danger">Blocked</span>`
-                    :`<span class="badge bg-success">Active</span>`
-                }
-            </td>
-            <td>
-                <button type="button" class="btn btn-outline-danger blockBtn"
+
+    list.innerHTML = users.map(user => `
+        <div class="user-card">
+            <div class="user-avatar ${user.isBlocked ? 'blocked' : ''}">
+                ${user.name.charAt(0).toUpperCase()}
+            </div>
+            <div class="user-info">
+                <p class="user-name">${user.name}</p>
+                <p class="user-email">${user.email}</p>
+            </div>
+            <div class="user-actions">
+                <span class="status-badge ${user.isBlocked ? 'blocked' : 'active'}">
+                    ${user.isBlocked ? 'Blocked' : 'Active'}
+                </span>
+                <button class="btn-block blockBtn ${user.isBlocked ? 'unblock' : ''}"
                         data-id="${user._id}"
-                        data-blocked="${user.isBlocked }">
-                    <i class="fa fa-power-off"></i>
-                    ${user.isBlocked
-                        ?`Unblock`
-                        :`Block`
-                    }
-                    </button>
-                </td>
-            </tr>
+                        data-blocked="${user.isBlocked}">
+                    <i class="fa fa-power-off me-1"></i>
+                    ${user.isBlocked ? 'Unblock' : 'Block'}
+                </button>
+            </div>
+        </div>
     `).join("");
 }
 
@@ -49,48 +54,48 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
         })
         .then(res => res.json())
         .then(data => { if (data.success) renderUsers(data.users); })
-        .catch((error) => showToast("Search failed", "danger"));
+        .catch(() => showToast("Search failed", "danger"));
     }, 400);
 });
 
-// Event Delegation
-document.getElementById("userTableBody").addEventListener("click", async (e) => {
+// eEvent Delegation
+document.getElementById("userList").addEventListener("click", async (e) => {
     const blockBtn = e.target.closest(".blockBtn");
-    if(blockBtn) {
-        const id = blockBtn.dataset.id;
-        const isBlocked = blockBtn.dataset.blocked === "true";
+    if (!blockBtn) return;
 
-        try {
-            const result = await Swal.fire({
-                title: isBlocked ? "Unblock User?" : "Block User?",
-                text: isBlocked ? "User can access shop again." : "User will be banned from shop.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                confirmButtonText: isBlocked ? "Yes, unblock user." : "Yes, block user."
-            });
+    const id        = blockBtn.dataset.id;
+    const isBlocked = blockBtn.dataset.blocked === "true";
 
-            if(!result.isConfirmed) return;
+    try {
+        const result = await Swal.fire({
+            title: isBlocked ? "Unblock User?" : "Block User?",
+            text:  isBlocked ? "User can access the shop again." : "User will be banned from the shop.",
+            icon:  "warning",
+            showCancelButton:    true,
+            confirmButtonColor:  "#d33",
+            confirmButtonText:   isBlocked ? "Yes, unblock" : "Yes, block"
+        });
 
-            const response = await fetch(`/admin/users/${id}/block`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-            });
+        if (!result.isConfirmed) return;
 
-            const data = await response.json();
+        const response = await fetch(`/admin/users/${id}/block`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" }
+        });
+        const data = await response.json();
 
-            if(data.success) {
-                Swal.fire("Success!", data.message, "success")
-                    .then(() => window.location.reload());
-            } else {
-                Swal.fire("Error!", data.message, "error");
-            }
-        } catch (error) {
-            Swal.fire("Error!", "Something went wrong. Try again.", "error");
+        if (data.success) {
+            Swal.fire("Done!", data.message, "success")
+                .then(() => window.location.reload());
+        } else {
+            Swal.fire("Error!", data.message, "error");
         }
+    } catch (error) {
+        Swal.fire("Error!", "Something went wrong. Try again.", "error");
     }
 });
 
+// Initial load
 document.addEventListener("DOMContentLoaded", () => {
     fetch("/admin/users", { headers: { "Accept": "application/json" } })
         .then(res => res.json())

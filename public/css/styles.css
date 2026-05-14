@@ -1,7 +1,6 @@
 body {
   background: radial-gradient(ellipse 80% 50% at 20% 0%, #0a1a2f 0%, #020617 65%);
   margin: 0;
-  overflow: hidden;
 }
 
 .vh-75 {
@@ -15,9 +14,14 @@ body {
   overflow-y: auto;
 }
 
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
 .admin-content {
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-grow: 1;
   padding: 1.5rem;
 }
@@ -30,11 +34,11 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
   backdrop-filter: blur(20px);
-  transition: 0.3s;
+  transition: transform 0.3s;
 }
 
 .glass:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
 }
 
 .table-transparant {
@@ -75,4 +79,189 @@ body {
 
 .custom-input:focus {
   border: 1px solid #0dcaf0;
+  box-shadow: 0 0 0 3px rgba(13,202,240,0.1);
+  outline: none;
+  color: white;
+  background: #020617;
 }
+
+/* User Card */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: border-color 0.2s;
+}
+.user-card:hover { border-color: rgba(13,202,240,0.2); }
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0dcaf0, #0ea5e9);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-avatar.blocked {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.user-info { flex: 1; min-width: 0; }
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-email {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.status-badge.active {
+  background: rgba(34,197,94,0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34,197,94,0.2);
+}
+
+.status-badge.blocked {
+  background: rgba(239,68,68,0.1);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.btn-block {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.08);
+  color: #f87171;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.btn-block:hover { background: rgba(239,68,68,0.18); transform: scale(1.03); }
+
+.btn-block.unblock {
+  border-color: rgba(34,197,94,0.3);
+  background: rgba(34,197,94,0.08);
+  color: #4ade80;
+}
+
+.btn-block.unblock:hover { background: rgba(34,197,94,0.18); }
+
+.user-empty {
+  text-align: center;
+  padding: 56px 24px;
+  color: #64748b;
+  font-size: 14px;
+}
+.user-empty i {
+  font-size: 32px;
+  opacity: 0.25;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.search-wrap {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+}
+
+.search-wrap i {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.search-wrap input { padding-left: 36px; }
+
+/* Tablet */
+@media (max-width: 991px) {
+    .admin-content {
+        padding: 1.25rem;
+    }
+
+    /* Stack chart rows on tablet */
+    .row .col-md-8,
+    .row .col-md-4,
+    .row .col-md-6 {
+        width: 100%;
+    }
+
+    /* Stat cards: 2-per-row on tablet */
+    .row .col-md-3 {
+        width: 50%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 575px) {
+    .admin-content {
+        padding: 1rem;
+    }
+
+    /* Stat cards: 1-per-row on mobile */
+    .row .col-md-3 {
+        width: 100%;
+    }
+
+    /* Shrink hover lift — too dramatic on touch */
+    .glass:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Chart buttons wrap nicely */
+    .btn-outline-info.btn-sm {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+} 
