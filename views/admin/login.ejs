@@ -3,62 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Sign In — GadgetHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-    <link href="/css/styles.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
 </head>
-<body class="bg-dark text-white">
-    <header class="d-flex justify-content-between p-4">
-        <h5 class="text-info fw-bold">GADGETHUB</h5>
-        <a href="/home" class="text-secondary small text-decoration-none">← BACK TO STORE</a>
-    </header>
-    <div class="d-flex justify-content-center align-items-center vh-75">
-        <div class="card glass p-4 rounded-4">
-            <div class="d-flex justify-content-center mb-4 small">
-                <span class="text-info border-bottom border-info pb-1">Admin Login</span>
-            </div>
-            <form action="/admin/login" method="POST">
-                <label class="form-label small text-secondary">EMAIL ADDRESS</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-envelope"></i>
-                    </span>
-                    <input type="email" name="email"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="name@example.com">
-                </div>
-                <div class="d-flex justify-content-between small text-secondary">
-                    <label>PASSWORD</label>
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text bg-black border-0 text-secondary">
-                        <i class="fa fa-lock"></i>
-                    </span>
-                    <input type="password" name="password"
-                            class="form-control bg-black border-0 text-white"
-                            placeholder="••••••••">
-                </div>
-                
-                <% if(error) { %>
-                    <p class="text-danger"><%= error %></p>
-                <% } %>
-                <button type="submit" class="btn btn-info w-100 fw-bold py-2 mt-2">Login</button>
-            </form>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between p-4 small text-secondary">
-        <div>
-            <strong>GadgetHub</strong><br>
-            © 2024 GADGETHUB OBSIDIAN
-        </div>
+<body class="login-body">
 
-        <div class="d-flex gap-3">
-            <span>PRIVACY</span>
-            <span>TERMS</span>
-            <span>SUPPORT</span>
-        </div>
+    <!-- ── Animated background ── -->
+    <div class="login-bg" aria-hidden="true">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-grid"></div>
     </div>
+
+    <div class="login-shell">
+
+        <!-- ══ LEFT PANEL ══ -->
+        <aside class="login-left" aria-hidden="true">
+
+            <div class="login-left-inner">
+                <!-- Logo -->
+                <div class="ll-logo">
+                    
+                    <span class="ll-logo-text">GADGETHUB</span>
+                </div>
+
+                <!-- Big headline -->
+                <div class="ll-copy">
+                    <h2 class="ll-heading">
+                        The future<br>
+                        <span class="ll-accent">of tech</span><br>
+                        is here.
+                    </h2>
+                    <p class="ll-sub">
+                        Sign in to explore cutting-edge gadgets, exclusive deals, and next-day delivery.
+                    </p>
+                </div>
+
+                <!-- Floating stat pills -->
+                <div class="ll-stats">
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-box" aria-hidden="true"></i>
+                        <span>12,000+ Products</span>
+                    </div>
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-bolt" aria-hidden="true"></i>
+                        <span>Daily Deals</span>
+                    </div>
+                    <div class="ll-stat-pill">
+                        <i class="fa fa-shield-halved" aria-hidden="true"></i>
+                        <span>Secure Checkout</span>
+                    </div>
+                </div>
+
+                <!-- Decorative circuit lines -->
+                <svg class="ll-circuit" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 100 H60 L80 80 H140 L160 100 H220 L240 80 H300" stroke="rgba(6,182,212,0.2)" stroke-width="1.5"/>
+                    <path d="M0 130 H40 L60 110 H100" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+                    <circle cx="80" cy="80" r="3" fill="rgba(6,182,212,0.4)"/>
+                    <circle cx="160" cy="100" r="3" fill="rgba(6,182,212,0.4)"/>
+                    <circle cx="240" cy="80" r="3" fill="rgba(6,182,212,0.25)"/>
+                    <path d="M140 80 V40 H180" stroke="rgba(6,182,212,0.15)" stroke-width="1"/>
+                    <circle cx="180" cy="40" r="2.5" fill="rgba(6,182,212,0.3)"/>
+                </svg>
+            </div>
+
+        </aside>
+
+        <!-- ══ RIGHT PANEL ══ -->
+        <main class="login-right">
+
+            <!-- Mobile logo (hidden on desktop) -->
+            <div class="login-mobile-logo">
+                <div class="ll-logo-mark sm">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+                <span class="ll-logo-text">GADGETHUB</span>
+            </div>
+
+            <div class="login-card">
+
+                <!-- Tab row -->
+                <h1 class="login-card-heading">Welcome Admin</h1>
+                <p class="login-card-sub">Enter your credentials to continue.</p>
+
+                <!-- Form -->
+                <form action="/admin/login" method="POST" id="loginForm" novalidate>
+
+                    <!-- Server error -->
+                    <% if(error) { %>
+                    <div class="login-server-error" role="alert">
+                        <i class="fa fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span><%= error %></span>
+                    </div>
+                    <% } %>
+
+                    <!-- Email -->
+                    <div class="login-field">
+                        <label class="login-label" for="email">Email address</label>
+                        <div class="login-input-wrap" id="emailGroup">
+                            <i class="fa fa-envelope login-input-icon" aria-hidden="true"></i>
+                            <input type="email" id="email" name="email"
+                                   class="login-input"
+                                   placeholder="name@example.com"
+                                   autocomplete="email"
+                                   aria-describedby="emailError">
+                        </div>
+                        <span class="login-error" id="emailError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="login-field">
+                        <label class="login-label" for="password">Password</label>
+                        <div class="login-input-wrap" id="passwordGroup">
+                            <i class="fa fa-lock login-input-icon" aria-hidden="true"></i>
+                            <input type="password" id="password" name="password"
+                                   class="login-input"
+                                   placeholder="••••••••"
+                                   autocomplete="current-password"
+                                   aria-describedby="passwordError">
+                            <button type="button" class="login-eye-btn" id="eyeBtn" aria-label="Show password">
+                                <i class="fa fa-eye" id="eyeIcon" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <span class="login-error" id="passwordError" role="alert" aria-live="polite"></span>
+                    </div>
+
+                    <button type="submit" class="login-submit-btn">
+                        <span>Sign In</span>
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </form>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="login-footer">
+                <span>© 2024 GadgetHub Obsidian</span>
+                <div class="login-footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Support</a>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/userLogin.js"></script>
+    
 </body>
 </html>
