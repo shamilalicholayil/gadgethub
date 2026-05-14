@@ -222,10 +222,11 @@ const getOrderDetails = async (req, res) => {
     const userId = req.session.user._id;
     const orderId = req.params.id;
     try {
+        const userData = await User.findById(userId);
         const order = await Order.findOne({ _id: orderId, user: userId }).populate("items.product", "name images");
         if(!order) return res.redirect("/orders");
         
-        res.render("orderDetails", { order, currentPage: "orderDetails" });
+        res.render("orderDetails", { order, userData, currentPage: "orderDetails" });
     } catch (error) {
         res.redirect("/orders");
     }
@@ -245,7 +246,7 @@ const cancelOrder = async (req, res) => {
         order.orderStatus = "cancelled";
         await order.save();
 
-        if(order.paymentMethod === "online" || order.paymentMethod === "wallet") {
+        if(order.paymentMethod === "online" || order.paymentMethod === "wallet" || order.paymentMethod === "cod") {
             await Wallet.findOneAndUpdate(
                 { user: userId },
                 {
@@ -281,7 +282,7 @@ const returnOrder = async (req, res) => {
         order.orderStatus = "returned";
         await order.save();
 
-        if(order.paymentMethod === "online" || order.paymentMethod === "wallet") {
+        if(order.paymentMethod === "online" || order.paymentMethod === "wallet" || order.paymentMethod === "cod") {
             await Wallet.findOneAndUpdate(
                 { user: userId },
                 {

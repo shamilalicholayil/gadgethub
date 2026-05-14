@@ -207,24 +207,6 @@ body {
   margin-bottom: 12px;
 }
 
-.search-wrap {
-  position: relative;
-  max-width: 300px;
-  width: 100%;
-}
-
-.search-wrap i {
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
-  font-size: 13px;
-  pointer-events: none;
-}
-
-.search-wrap input { padding-left: 36px; }
-
 /* Add image slot */
 .img-slot-label {
   display: inline-flex;
@@ -239,6 +221,7 @@ body {
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
+
 .img-slot-label:hover {
   border-color: rgba(13,202,240,0.4);
   color: #0dcaf0;
@@ -250,6 +233,16 @@ body {
   padding: 48px 24px;
   color: #64748b;
   font-size: 14px;
+}
+
+.field-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 6px;
+  display: block;
 }
 
 /* Tablet */

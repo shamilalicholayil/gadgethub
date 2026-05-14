@@ -19,18 +19,16 @@
             <!-- Page header -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <h4 class="text-info fw-bold mb-0">Products</h4>
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <div class="d-flex justify-content-center gap-2">
-                        <input type="text" 
-                            id="searchInput"
-                            placeholder="Search Name" 
-                            class="form-control bg-black custom-input border-secondary w-50">
-                        <button class="btn btn-info"
-                                data-bs-toggle="modal"
-                                data-bs-target="#addProductModal">
-                            <i class="fa fa-plus me-1"></i> Add Product
-                        </button>
-                    </div>
+                <div class="d-flex justify-content-center gap-2">
+                    <input type="text"
+                           id="searchInput"
+                           placeholder="Search Product"
+                           class="form-control bg-black custom-input border-secondary w-50">
+                    <button class="btn btn-info"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addProductModal">
+                        <i class="fa fa-plus me-1"></i> Add Product
+                    </button>
                 </div>
             </div>
 
@@ -52,7 +50,7 @@
                         </thead>
                         <tbody id="productTableBody">
                             <tr>
-                                <td colspan="8" class="table-loading">
+                                <td colspan="8" class="text-center py-4 text-secondary">
                                     <i class="fa fa-spinner fa-spin me-2"></i>Loading products…
                                 </td>
                             </tr>
@@ -80,47 +78,54 @@
 
     <!-- ── Add Product Modal ───────────────────────────────── -->
     <div class="modal fade" id="addProductModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content glass-modal text-light">
+
                 <div class="modal-header border-0">
                     <h5 class="modal-title text-info fw-bold">
                         <i class="fa fa-box me-2"></i>Add Product
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
 
                     <h6 class="text-secondary mb-3">Basic Info</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Product Name</label>
                             <input type="text" id="productName"
                                    class="form-control custom-input"
-                                   placeholder="Product Name">
+                                   placeholder="e.g. iPhone 15 Pro">
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Description</label>
                             <input type="text" id="productDesc"
                                    class="form-control custom-input"
-                                   placeholder="Short Description">
+                                   placeholder="Short description">
                         </div>
                     </div>
 
                     <h6 class="text-secondary mt-4 mb-3">Pricing & Stock</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Price (₹)</label>
                             <input type="number" id="productPrice"
                                    class="form-control custom-input"
-                                   placeholder="Price (₹)">
+                                   placeholder="e.g. 79999">
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Stock Quantity</label>
                             <input type="number" id="productStock"
                                    class="form-control custom-input"
-                                   placeholder="Stock Quantity">
+                                   placeholder="e.g. 50">
                         </div>
                     </div>
 
                     <h6 class="text-secondary mt-4 mb-3">Classification</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Brand</label>
                             <select id="productBrand" class="form-select custom-input">
                                 <option value="">Select Brand</option>
                                 <% brands.forEach(brand => { %>
@@ -129,6 +134,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Category</label>
                             <select id="productCategory" class="form-select custom-input">
                                 <option value="">Select Category</option>
                                 <% categories.forEach(category => { %>
@@ -150,37 +156,43 @@
                         <% } %>
                     </div>
                     <div id="productImagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
-                    <p id="productError" class="text-danger mt-2 d-none"></p>
+                    <p id="productError" class="text-danger mt-3 mb-0 d-none"></p>
 
                 </div>
+
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-info" id="saveProductBtn">
                         <i class="fa fa-save me-1"></i> Save Product
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!-- ── Edit Product Modal ──────────────────────────────── -->
     <div class="modal fade" id="editProductModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content glass-modal text-light">
+
                 <div class="modal-header border-0">
                     <h5 class="modal-title text-info fw-bold">
                         <i class="fa fa-box me-2"></i>Edit Product
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
 
                     <h6 class="text-secondary mb-3">Basic Info</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Product Name</label>
                             <input type="text" id="editProductName"
                                    class="form-control custom-input" value="">
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Description</label>
                             <input type="text" id="editProductDesc"
                                    class="form-control custom-input" value="">
                         </div>
@@ -189,10 +201,12 @@
                     <h6 class="text-secondary mt-4 mb-3">Pricing & Stock</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Price (₹)</label>
                             <input type="number" id="editProductPrice"
                                    class="form-control custom-input" value="">
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Stock Quantity</label>
                             <input type="number" id="editProductStock"
                                    class="form-control custom-input" value="">
                         </div>
@@ -201,6 +215,7 @@
                     <h6 class="text-secondary mt-4 mb-3">Classification</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
+                            <label class="field-label">Brand</label>
                             <select id="editProductBrand" class="form-select custom-input">
                                 <option value="">Select Brand</option>
                                 <% brands.forEach(brand => { %>
@@ -209,6 +224,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Category</label>
                             <select id="editProductCategory" class="form-select custom-input">
                                 <option value="">Select Category</option>
                                 <% categories.forEach(category => { %>
@@ -221,15 +237,17 @@
                     <h6 class="text-secondary mt-4 mb-3">Product Offer</h6>
                     <div class="row g-3 align-items-center">
                         <div class="col-md-6">
-                            <div class="form-check form-switch">
+                            <label class="field-label">Enable Offer</label>
+                            <div class="form-check form-switch mt-1">
                                 <input class="form-check-input" type="checkbox" id="editHasOffer">
-                                <label class="form-check-label text-secondary">Enable Offer</label>
+                                <label class="form-check-label text-secondary">Toggle on to activate</label>
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label class="field-label">Offer Percentage</label>
                             <input type="number" id="editOfferPercent"
                                    class="form-control custom-input"
-                                   placeholder="Offer % (e.g. 20)">
+                                   placeholder="e.g. 20">
                         </div>
                     </div>
 
@@ -238,14 +256,16 @@
                     <input type="file" id="editImage_<%= i %>" name="image_<%= i %>" class="d-none" accept="image/*">
                     <% } %>
                     <div id="editProductImagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
-                    <p id="editProductError" class="text-danger mt-2 d-none"></p>
+                    <p id="editProductError" class="text-danger mt-3 mb-0 d-none"></p>
 
                 </div>
+
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-info" id="saveEditProductBtn">
                         <i class="fa fa-save me-1"></i> Save Changes
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
