@@ -62,7 +62,7 @@
 /* Hamburger button — hidden on desktop */
 .sidebar-toggle {
     display: none;
-    position: fixed;
+    position: relative;
     top: 16px;
     left: 16px;
     z-index: 1100;

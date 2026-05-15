@@ -80,7 +80,7 @@ router.put("/coupons/:id", adminAuth, editCoupon);
 router.delete("/coupons/:id", adminAuth, deleteCoupon);
 
 router.get("/orders", adminAuth, getAdminOrders);
-router.get("/order-info", adminAuth, getAdminOrderDetails);
+router.get("/orders/:id", adminAuth, getAdminOrderDetails);
 router.patch("/orders/:id/status", adminAuth, updateOrderStatus);
 
 module.exports = router;

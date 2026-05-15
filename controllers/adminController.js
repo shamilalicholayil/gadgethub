@@ -730,12 +730,21 @@ const getAdminOrders = async (req, res) => {
 
         res.render("admin/orders", { orders, currentPage: "orders" });
     } catch (error) {
-        res.render("admin/orders", { orders: [], error: "Something went wrong." })
+        res.render("admin/orders", { orders: [], error: "Something went wrong." });
     }
 }
 
-const getAdminOrderDetails = (req, res) => {
-    res.render("admin/OrderDetails", { currentPage: "orders"})
+const getAdminOrderDetails = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+
+        const order = await Order.findById(req.params.id).populate("user", "name email").populate("items.product", "name images price");
+        if(!order) return res.redirect("/admin/orders");
+
+        res.render("admin/OrderDetails", { order, currentPage: "orders"});
+    } catch (error) {
+        res.render("admin/orders", { orders: [], error: "Something went wrong." });
+    }
 }
 
 const updateOrderStatus = async (req, res) => {
@@ -751,6 +760,7 @@ const updateOrderStatus = async (req, res) => {
         const order = await Order.findById(orderId);
         if(!order) return res.json({ success: false, message: "Order not found." });
         order.orderStatus = orderStatus;
+        order.statusHistory.push({ status: order.orderStatus });
         await order.save();
         res.json({ success: true, message: `Order status changed to ${orderStatus}.`, orderStatus: order.orderStatus });
     } catch (error) {

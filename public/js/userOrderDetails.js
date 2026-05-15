@@ -34,6 +34,27 @@ document.getElementById("downloadInvoice")?.addEventListener("click", () => {
     doc.save(`invoice-${orderId}.pdf`);
 });
 
+const timelineSteps = [
+    "Order Confirmed",
+    "Packed Successfully", 
+    "Shipped",
+    "Out For Delivery",
+    "Delivered"
+];
+
+const timeline = document.getElementById("timeline");
+
+timelineSteps.forEach((title, i) => {
+    const step = document.createElement("div");
+    step.className = "timeline-step";
+    step.innerHTML = `
+        <div class="timeline-dot"></div>
+        <div class="timeline-title">${title}</div>
+        <div class="timeline-date"></div>
+    `;
+    timeline.appendChild(step);
+});
+
 document.getElementById("cancelBtn")?.addEventListener("click", async () => {
     try {
         const id = document.getElementById("cancelBtn").dataset.id;
@@ -85,17 +106,17 @@ const steps = document.querySelectorAll(".timeline-step");
 
 steps.forEach((step, i) => {
     if (currentIndex === -1) {
-        // cancelled or returned
-        if (i < steps.length - 1) {
-            step.classList.add("active");
-        } else {
-            step.classList.remove("active");
-            step.querySelector(".timeline-dot").style.background = "#dc3545";
-            step.querySelector(".timeline-title").textContent = orderStatus.toUpperCase();
-        }
-    } else {
-        i <= currentIndex
-            ? step.classList.add("active")
-            : step.classList.remove("active");
+        const cancelledIndex = statusOrder.indexOf(cancelledAtStatus);
+        steps.forEach((step, j) => {
+            if (j <= cancelledIndex) {
+                step.classList.add("active");
+            } else if (j === steps.length - 1) {
+                step.classList.remove("active");
+                step.querySelector(".timeline-dot").style.background = "#dc3545";
+                step.querySelector(".timeline-title").textContent = orderStatus.toUpperCase();
+            } else {
+                step.classList.remove("active");
+            }
+        });
     }
 });

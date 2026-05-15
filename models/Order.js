@@ -51,7 +51,15 @@ const orderSchema = new mongoose.Schema({
     discount: {
         type: Number,
         default: 0
-    }
+    },
+    cancelledAtStatus: {
+        type: String,
+        default: null
+    },
+    statusHistory: [{
+        status: String,
+        changedAt: { type: Date, default: Date.now }
+    }]
 },{ timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

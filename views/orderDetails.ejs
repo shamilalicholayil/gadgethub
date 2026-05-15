@@ -160,67 +160,7 @@
             </div>
 
             <!-- TIMELINE -->
-            <div class="timeline">
-
-              <div class="timeline-step active">
-                <div class="timeline-dot"></div>
-
-                <div class="timeline-title">
-                  Order Confirmed
-                </div>
-
-                <div class="timeline-date">
-                  14 May 2026 - 09:30 AM
-                </div>
-              </div>
-
-              <div class="timeline-step active">
-                <div class="timeline-dot"></div>
-
-                <div class="timeline-title">
-                  Packed Successfully
-                </div>
-
-                <div class="timeline-date">
-                  14 May 2026 - 11:10 AM
-                </div>
-              </div>
-
-              <div class="timeline-step active">
-                <div class="timeline-dot"></div>
-
-                <div class="timeline-title">
-                  Shipped
-                </div>
-
-                <div class="timeline-date">
-                  15 May 2026 - 08:00 AM
-                </div>
-              </div>
-
-              <div class="timeline-step active">
-                <div class="timeline-dot"></div>
-
-                <div class="timeline-title">
-                  Out For Delivery
-                </div>
-
-                <div class="timeline-date">
-                  16 May 2026 - 10:15 AM
-                </div>
-              </div>
-
-              <div class="timeline-step active">
-                <div class="timeline-dot"></div>
-
-                <div class="timeline-title">
-                  Delivered
-                </div>
-
-                <div class="timeline-date">
-                  16 May 2026 - 04:30 PM
-                </div>
-              </div>
+            <div class="timeline" id="timeline">
 
             </div>
 
@@ -352,8 +292,9 @@
             quantity: i.quantity,
             price: i.price
         }))) %>;
+        const cancelledAtStatus = "<%- order.cancelledAtStatus || '' %>";
     </script>
-    <script src="/js/orderDetails.js"></script>
+    <script src="/js/userOrderDetails.js"></script>
 
 </body>
 </html>

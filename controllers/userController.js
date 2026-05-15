@@ -243,6 +243,8 @@ const cancelOrder = async (req, res) => {
             return res.json({ success: false, message: "Order cannot be cancelled." });
         }
 
+        order.cancelledAtStatus = order.orderStatus;
+        order.statusHistory.push({ status: order.orderStatus });
         order.orderStatus = "cancelled";
         await order.save();
 
@@ -279,6 +281,8 @@ const returnOrder = async (req, res) => {
             return res.json({ success: false, message: "Only delivered order can be returned." });
         }
 
+        order.cancelledAtStatus = order.orderStatus;
+        order.statusHistory.push({ status: order.orderStatus });
         order.orderStatus = "returned";
         await order.save();
 
