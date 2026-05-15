@@ -287,6 +287,10 @@
         const orderStatus = "<%- order.orderStatus %>";
         const orderId = "<%- order._id %>";
         const orderTotal = <%- order.totalAmount %>;
+        const orderDiscount = <%- order.discount %>;
+        const orderPayment = "<%- order.paymentMethod.toUpperCase() %>";
+        const customerName = "<%- userData.name %>";
+        const customerEmail = "<%- userData.email %>";
         const orderItems = <%- JSON.stringify(order.items.map(i => ({
             name: i.product.name,
             quantity: i.quantity,

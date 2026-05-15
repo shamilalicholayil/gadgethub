@@ -44,14 +44,6 @@
           </p>
         </div>
 
-        <div class="d-flex gap-3 top-actions">
-
-          <button class="btn btn-info fw-semibold px-4">
-            Update Status
-          </button>
-
-        </div>
-
       </div>
 
       <!-- SUMMARY -->
@@ -100,10 +92,18 @@
 
           <div class="glass p-4 h-100">
 
-            <h5 class="mb-4">
-              <i class="fa-solid fa-user custom-color me-2"></i>
-              Customer Details
-            </h5>
+            <div class="d-flex justify-content-between">
+
+                <h5 class="mb-4">
+                <i class="fa-solid fa-user custom-color me-2"></i>
+                Customer Details
+                </h5>
+
+                <button class="btn btn-outline-info" id="downloadInvoice">
+                    <i class="fa fa-download"></i> Download Invoice
+                </button>
+
+            </div>
 
             <div class="mb-3">
               <small class="custom-color">Customer Name</small>
@@ -259,12 +259,24 @@
 
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-      const orderStatus = "<%- order.orderStatus %>";
-      const cancelledAtStatus = "<%- order.cancelledAtStatus || '' %>";
-  </script>
-  <script src="/js/adminOrderDetails.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const orderStatus = "<%- order.orderStatus %>";
+        const orderId = "<%- order._id %>";
+        const orderTotal = <%- order.totalAmount %>;
+        const orderDiscount = <%- order.discount %>;
+        const orderPayment = "<%- order.paymentMethod.toUpperCase() %>";
+        const customerName = "<%- order.user.name %>";
+        const customerEmail = "<%- order.user.email %>";
+        const orderItems = <%- JSON.stringify(order.items.map(i => ({
+            name: i.product.name,
+            quantity: i.quantity,
+            price: i.price
+        }))) %>;
+        const cancelledAtStatus = "<%- order.cancelledAtStatus || '' %>";
+    </script>
+    <script src="/js/adminOrderDetails.js"></script>
 </body>
 </html>
