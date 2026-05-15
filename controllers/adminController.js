@@ -741,7 +741,7 @@ const getAdminOrderDetails = async (req, res) => {
         const order = await Order.findById(req.params.id).populate("user", "name email").populate("items.product", "name images price");
         if(!order) return res.redirect("/admin/orders");
 
-        res.render("admin/OrderDetails", { order, currentPage: "orders"});
+        res.render("admin/orderDetails", { order, currentPage: "orders"});
     } catch (error) {
         res.render("admin/orders", { orders: [], error: "Something went wrong." });
     }
